@@ -208,5 +208,6 @@ pub fn ex1() {
 
     //     println!("Một ngày có {SECONDS_PER_DAY} giây");
     //     println!("Một tuần có {SECONDS_PER_WEEK} giây");
-    let number = "  42\n";
+    // let number = "  42\n";
+    dbg!("Hello");
 }
