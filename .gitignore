@@ -1,0 +1,5 @@
+# Thư mục build của Cargo (sinh ra bởi cargo build / cargo run / cargo check)
+target/
+
+# File hệ thống của macOS
+.DS_Store
