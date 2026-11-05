@@ -6,8 +6,8 @@
 |---|---|
 | Chủ đề | `Vec<T>`, `String` (UTF-8), `HashMap<K, V>`, nhắc ngắn `HashSet` và `BTreeMap` |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `collections` (thư mục này) |
-| Kiến thức cần có | `Option` và `match` (bài [`enums_match`](../enums_match/README.md)); mượn `&` và `&mut` (bài [`ownership`](../ownership/README.md)) |
+| Dự án | `learn_08_collections` (thư mục này) |
+| Kiến thức cần có | `Option` và `match` (bài [`enums_match`](../learn_07_enums_match/README.md)); mượn `&` và `&mut` (bài [`ownership`](../learn_05_ownership/README.md)) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 8 |
 
 ## Mục lục
@@ -42,7 +42,7 @@ Sau bài học này bạn có thể:
 **Cách dùng tài liệu.** Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd collections
+cd learn_08_collections
 cargo run
 ```
 
@@ -80,8 +80,8 @@ Với collection, biến chỉ giữ một "tay cầm" nhỏ (con trỏ, độ d
 
 ### 2.3 Ôn nhanh hai ý cần dùng
 
-- **`Option<T>`** là enum có hai dạng: `Some(giá_trị)` hoặc `None`. Nhiều phương thức của collection (`get`, `pop`, `first`...) trả về `Option` vì phần tử có thể không tồn tại. Cách xử lý thường dùng: `match` hoặc `unwrap_or` (xem bài [`enums_match`](../enums_match/README.md)).
-- **Mượn (borrow):** `&x` để đọc, `&mut x` để sửa. Tại một thời điểm, hoặc có **nhiều** `&`, hoặc có **một** `&mut`, không có cả hai cùng lúc (xem bài [`ownership`](../ownership/README.md)). Quy tắc này giải thích phần lớn lỗi bạn sẽ gặp với collection.
+- **`Option<T>`** là enum có hai dạng: `Some(giá_trị)` hoặc `None`. Nhiều phương thức của collection (`get`, `pop`, `first`...) trả về `Option` vì phần tử có thể không tồn tại. Cách xử lý thường dùng: `match` hoặc `unwrap_or` (xem bài [`enums_match`](../learn_07_enums_match/README.md)).
+- **Mượn (borrow):** `&x` để đọc, `&mut x` để sửa. Tại một thời điểm, hoặc có **nhiều** `&`, hoặc có **một** `&mut`, không có cả hai cùng lúc (xem bài [`ownership`](../learn_05_ownership/README.md)). Quy tắc này giải thích phần lớn lỗi bạn sẽ gặp với collection.
 
 ---
 
@@ -437,7 +437,7 @@ Some(30) Some(2)
 
 ### 3.9 Vec chứa nhiều kiểu: dùng enum
 
-`Vec` chỉ chứa **một kiểu**. Cần lưu nhiều loại giá trị trong cùng một danh sách thì gói chúng vào các biến thể của một `enum` (xem bài [`enums_match`](../enums_match/README.md)):
+`Vec` chỉ chứa **một kiểu**. Cần lưu nhiều loại giá trị trong cùng một danh sách thì gói chúng vào các biến thể của một `enum` (xem bài [`enums_match`](../learn_07_enums_match/README.md)):
 
 ```rust
 enum Cell {
@@ -748,7 +748,7 @@ Rust khá thú vị
 | `&str` | `String` | `.to_string()`, `String::from(s)`, `.to_owned()`, `.into()` |
 | `String` | `&str` | `&s` (tự đổi khi truyền vào hàm), hoặc `s.as_str()` |
 | Số | `String` | `n.to_string()`, hoặc `format!("{n}")` |
-| `&str` / `String` | Số | `s.parse::<T>()`, trả về `Result` (xem `parse` trong dự án trò chơi đoán số `gessing_game`) |
+| `&str` / `String` | Số | `s.parse::<T>()`, trả về `Result` (xem `parse` trong dự án trò chơi đoán số `learn_02_gessing_game`) |
 
 ```rust
 fn main() {
@@ -984,7 +984,7 @@ Khi `insert`, khoá và giá trị được **đưa vào** map:
 |---|---|
 | Kiểu `Copy` (`i32`, `bool`, `char`...) | **Sao chép** vào map; biến gốc vẫn dùng được |
 | Kiểu sở hữu (`String`, `Vec`...) | **Chuyển** vào map; biến gốc không dùng được nữa |
-| Tham chiếu (`&str`...) | Chỉ sao chép tham chiếu; dữ liệu gốc phải sống lâu hơn map (xem bài [`generics_traits_lifetimes`](../generics_traits_lifetimes/README.md)) |
+| Tham chiếu (`&str`...) | Chỉ sao chép tham chiếu; dữ liệu gốc phải sống lâu hơn map (xem bài [`generics_traits_lifetimes`](../learn_10_generics_traits_lifetimes/README.md)) |
 
 Muốn tiếp tục dùng `String` sau khi `insert`, đưa vào một **bản sao**:
 
@@ -1051,7 +1051,7 @@ false
 
 ## 6. Thực hành
 
-Hai bài thực hành có hướng dẫn, đều dùng `HashMap`. Thực hiện trong `collections/src/main.rs` và chạy bằng `cargo run`.
+Hai bài thực hành có hướng dẫn, đều dùng `HashMap`. Thực hiện trong `learn_08_collections/src/main.rs` và chạy bằng `cargo run`.
 
 ### Lab 1. Đếm từ trong câu
 

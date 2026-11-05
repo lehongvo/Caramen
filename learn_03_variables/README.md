@@ -6,7 +6,7 @@
 |---|---|
 | Chủ đề | Biến, tính bất biến, hằng số, shadowing, kiểu dữ liệu cơ bản |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `variables` (thư mục này) |
+| Dự án | `learn_03_variables` (thư mục này) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 3 (mục 3.1 và 3.2) |
 
 ## Mục lục
@@ -37,7 +37,7 @@ Sau bài học này bạn có thể:
 **Cách dùng tài liệu.** Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd variables
+cd learn_03_variables
 cargo run
 ```
 
@@ -644,7 +644,7 @@ a
 
 ## 5. Thực hành
 
-Hai bài thực hành có hướng dẫn, cùng xoay quanh một hoá đơn bán hàng nhỏ. Thực hiện trong `variables/src/main.rs` và chạy bằng `cargo run`.
+Hai bài thực hành có hướng dẫn, cùng xoay quanh một hoá đơn bán hàng nhỏ. Thực hiện trong `learn_03_variables/src/main.rs` và chạy bằng `cargo run`.
 
 ### Lab 1. Số lượng hàng: let và let mut
 

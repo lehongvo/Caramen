@@ -6,9 +6,9 @@
 |---|---|
 | Chủ đề | Ownership, move, clone, copy, tham chiếu và mượn (borrowing), slice |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `ownership` (thư mục này) |
+| Dự án | `learn_05_ownership` (thư mục này) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 4 (mục 4.1, 4.2 và 4.3) |
-| Bài trước | [Hàm và điều khiển luồng](../functions_control_flow/README.md) |
+| Bài trước | [Hàm và điều khiển luồng](../learn_04_functions_control_flow/README.md) |
 
 ## Mục lục
 
@@ -40,12 +40,12 @@ Sau bài học này bạn có thể:
 - [ ] Dùng slice (`&str`, `&[T]`) và chọn đúng giữa `&str` và `String`.
 - [ ] Đọc hiểu và sửa các lỗi `E0382`, `E0499`, `E0502`, `E0106`, `E0515`.
 
-**Kiến thức cần có:** biết khai báo biến (`let`, `let mut`), kiểu dữ liệu cơ bản và cách viết hàm đơn giản. Nếu cần ôn lại, xem bài [Biến](../variables/README.md) và bài [Hàm và điều khiển luồng](../functions_control_flow/README.md).
+**Kiến thức cần có:** biết khai báo biến (`let`, `let mut`), kiểu dữ liệu cơ bản và cách viết hàm đơn giản. Nếu cần ôn lại, xem bài [Biến](../learn_03_variables/README.md) và bài [Hàm và điều khiển luồng](../learn_04_functions_control_flow/README.md).
 
 **Cách dùng tài liệu.** Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd ownership
+cd learn_05_ownership
 cargo run
 ```
 
@@ -1007,7 +1007,7 @@ Cũng như `&str` với `String`, `&[T]` là kiểu nên dùng cho tham số khi
 
 ## 7. Thực hành
 
-Hai bài thực hành có hướng dẫn. Thực hiện trong `ownership/src/main.rs` và chạy bằng `cargo run`.
+Hai bài thực hành có hướng dẫn. Thực hiện trong `learn_05_ownership/src/main.rs` và chạy bằng `cargo run`.
 
 ### Lab 1. Ghi chú: từ move đến mượn
 

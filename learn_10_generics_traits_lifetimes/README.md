@@ -6,8 +6,8 @@
 |---|---|
 | Chủ đề | Generics, trait, trait bound, `derive`, trait object (`dyn`), lifetime |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `generics_traits_lifetimes` (thư mục này) |
-| Bài trước | [error_handling](../error_handling/README.md) |
+| Dự án | `learn_10_generics_traits_lifetimes` (thư mục này) |
+| Bài trước | [error_handling](../learn_09_error_handling/README.md) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 10 và mục 18.2 (trait object) |
 
 ## Mục lục
@@ -42,7 +42,7 @@ Sau bài học này bạn có thể:
 **Cách dùng tài liệu.** Mỗi ví dụ là một chương trình hoàn chỉnh (có `fn main`). Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd generics_traits_lifetimes
+cd learn_10_generics_traits_lifetimes
 cargo run
 ```
 
@@ -54,9 +54,9 @@ Các ví dụ được đánh dấu như sau:
 
 **Liên hệ với các bài trước.** Bài này dùng lại nhiều thứ bạn đã gặp:
 
-- `Option<T>` và `Result<T, E>` (bài [error_handling](../error_handling/README.md)) chính là hai `enum` generic. Hôm nay bạn sẽ hiểu chữ `<T>` trong đó nghĩa là gì.
-- Tham chiếu `&`, mượn (borrow) và việc giá trị bị huỷ khi ra khỏi phạm vi (bài [ownership](../ownership/README.md)) là nền tảng của lifetime.
-- Ở bài [structs](../structs/README.md) ta đã lưu ý: trường của `struct` nên dùng `String` thay vì `&str`. Lý do nằm ở mục [5.6](#56-struct-chứa-tham-chiếu) của bài này.
+- `Option<T>` và `Result<T, E>` (bài [error_handling](../learn_09_error_handling/README.md)) chính là hai `enum` generic. Hôm nay bạn sẽ hiểu chữ `<T>` trong đó nghĩa là gì.
+- Tham chiếu `&`, mượn (borrow) và việc giá trị bị huỷ khi ra khỏi phạm vi (bài [ownership](../learn_05_ownership/README.md)) là nền tảng của lifetime.
+- Ở bài [structs](../learn_06_structs/README.md) ta đã lưu ý: trường của `struct` nên dùng `String` thay vì `&str`. Lý do nằm ở mục [5.6](#56-struct-chứa-tham-chiếu) của bài này.
 
 ---
 
@@ -849,7 +849,7 @@ Point {
 | `Eq` | Đánh dấu "so sánh bằng hoàn chỉnh" (`f64` chỉ có `PartialEq`, vì `NaN != NaN`) | Có `PartialEq`, mọi trường đều `Eq` |
 | `PartialOrd` | So sánh `<`, `>`; với `derive`, so từng trường theo thứ tự khai báo | Có `PartialEq`, mọi trường đều `PartialOrd` |
 | `Default` | `Kiểu::default()` cho giá trị mặc định (số là 0, chuỗi rỗng...) | Mọi trường đều `Default` |
-| `Hash` | Dùng làm khoá của `HashMap`, `HashSet` (bài [collections](../collections/README.md)) | Mọi trường đều `Hash` |
+| `Hash` | Dùng làm khoá của `HashMap`, `HashSet` (bài [collections](../learn_08_collections/README.md)) | Mọi trường đều `Hash` |
 
 Thiếu `derive` thì dùng tính năng tương ứng sẽ lỗi. Dùng `{:?}` với kiểu chưa có `Debug`:
 
@@ -1000,7 +1000,7 @@ Quy tắc chọn: mặc định dùng generics. Chỉ dùng `dyn` khi thật s�
 
 ### 5.1 Vấn đề: tham chiếu treo
 
-Ở bài [ownership](../ownership/README.md), bạn đã biết một giá trị bị huỷ khi biến sở hữu nó ra khỏi phạm vi. Nếu một tham chiếu vẫn trỏ vào giá trị đã huỷ, ta có **tham chiếu treo** (*dangling reference*), nguồn gốc của nhiều lỗi bộ nhớ nghiêm trọng ở C và C++. Rust chặn chúng bằng **borrow checker**, thành phần so sánh "thời gian sống" của giá trị với "thời gian sống" của các tham chiếu tới nó.
+Ở bài [ownership](../learn_05_ownership/README.md), bạn đã biết một giá trị bị huỷ khi biến sở hữu nó ra khỏi phạm vi. Nếu một tham chiếu vẫn trỏ vào giá trị đã huỷ, ta có **tham chiếu treo** (*dangling reference*), nguồn gốc của nhiều lỗi bộ nhớ nghiêm trọng ở C và C++. Rust chặn chúng bằng **borrow checker**, thành phần so sánh "thời gian sống" của giá trị với "thời gian sống" của các tham chiếu tới nó.
 
 ```rust
 fn main() {
@@ -1367,7 +1367,7 @@ help: consider introducing a named lifetime parameter
 
 Nếu dữ liệu gốc bị huỷ trước `Excerpt` thì compiler cũng chặn bằng `E0597`, giống ví dụ `dangling` ở mục [5.1](#51-vấn-đề-tham-chiếu-treo).
 
-Đây chính là lý do ở bài [structs](../structs/README.md) ta khuyên dùng `String` cho trường của `struct`: `String` **sở hữu** dữ liệu nên `struct` không phụ thuộc vào ai, không cần lifetime. Dùng `&'a str` khi bạn muốn tránh sao chép chuỗi lớn và chấp nhận `struct` bị ràng buộc với dữ liệu gốc.
+Đây chính là lý do ở bài [structs](../learn_06_structs/README.md) ta khuyên dùng `String` cho trường của `struct`: `String` **sở hữu** dữ liệu nên `struct` không phụ thuộc vào ai, không cần lifetime. Dùng `&'a str` khi bạn muốn tránh sao chép chuỗi lớn và chấp nhận `struct` bị ràng buộc với dữ liệu gốc.
 
 ### 5.7 Lifetime trong khối impl
 
@@ -1439,7 +1439,7 @@ Lưu ý:
 
 ## 6. Thực hành
 
-Ba bài thực hành có hướng dẫn, mỗi bài ứng với một chủ đề: generics, trait và lifetime. Thực hiện trong `generics_traits_lifetimes/src/main.rs` và chạy bằng `cargo run`.
+Ba bài thực hành có hướng dẫn, mỗi bài ứng với một chủ đề: generics, trait và lifetime. Thực hiện trong `learn_10_generics_traits_lifetimes/src/main.rs` và chạy bằng `cargo run`.
 
 ### Lab 1. Hàm largest cho nhiều kiểu
 
@@ -1945,7 +1945,7 @@ Hãy dùng `&'a str` khi kết quả thật sự trỏ vào dữ liệu gốc v�
 
 ### 8.1 Cách đọc lỗi liên quan đến trait và lifetime
 
-Cách đọc một thông báo lỗi (mã lỗi, vị trí, `^^^^`, `help:`) giống ở bài [variables](../variables/README.md). Với generics, trait và lifetime, có thêm vài cụm từ hay gặp:
+Cách đọc một thông báo lỗi (mã lỗi, vị trí, `^^^^`, `help:`) giống ở bài [variables](../learn_03_variables/README.md). Với generics, trait và lifetime, có thêm vài cụm từ hay gặp:
 
 | Cụm từ trong thông báo | Ý nghĩa | Việc nên làm |
 |---|---|---|
@@ -2440,7 +2440,7 @@ Some("một") true
 None
 ```
 
-**Gợi ý:** `Vec` đã có sẵn `push`, `pop`, `last`, `len`, `is_empty` (bài [collections](../collections/README.md)). `peek` chỉ mượn nên trả về `Option<&T>`.
+**Gợi ý:** `Vec` đã có sẵn `push`, `pop`, `last`, `len`, `is_empty` (bài [collections](../learn_08_collections/README.md)). `peek` chỉ mượn nên trả về `Option<&T>`.
 
 <details>
 <summary>Xem đáp án</summary>

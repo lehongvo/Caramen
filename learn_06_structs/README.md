@@ -6,8 +6,8 @@
 |---|---|
 | Chủ đề | `struct` (có tên trường, tuple struct, unit struct), `impl`, method, associated function, `#[derive(Debug)]` |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `structs` (thư mục này) |
-| Học trước | [Biến và kiểu dữ liệu](../variables/README.md), [Ownership](../ownership/README.md) |
+| Dự án | `learn_06_structs` (thư mục này) |
+| Học trước | [Biến và kiểu dữ liệu](../learn_03_variables/README.md), [Ownership](../learn_05_ownership/README.md) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 5 (mục 5.1, 5.2 và 5.3) |
 
 ## Mục lục
@@ -42,7 +42,7 @@ Sau bài học này bạn có thể:
 **Cách dùng tài liệu.** Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd structs
+cd learn_06_structs
 cargo run
 ```
 
@@ -52,7 +52,7 @@ Các ví dụ được đánh dấu như sau:
 - Ví dụ có chú thích `// ⚠️` biên dịch được nhưng sinh cảnh báo.
 - Các ví dụ còn lại biên dịch sạch và cho đúng kết quả ghi bên dưới.
 
-> **Gợi ý:** bài này dùng nhiều khái niệm của bài [Ownership](../ownership/README.md) (chuyển quyền sở hữu, mượn `&` và `&mut`). Nếu thấy chỗ nào khó hiểu, hãy đọc lại bài đó.
+> **Gợi ý:** bài này dùng nhiều khái niệm của bài [Ownership](../learn_05_ownership/README.md) (chuyển quyền sở hữu, mượn `&` và `&mut`). Nếu thấy chỗ nào khó hiểu, hãy đọc lại bài đó.
 
 ---
 
@@ -62,7 +62,7 @@ Các ví dụ được đánh dấu như sau:
 
 `struct` (viết tắt của *structure*) là cách để **tự tạo một kiểu dữ liệu mới** bằng cách gom nhiều giá trị liên quan lại, và **đặt tên cho từng giá trị**. Mỗi phần có tên đó gọi là một **trường** (*field*).
 
-Bài [Biến](../variables/README.md) đã giới thiệu tuple: gom nhiều giá trị, nhưng phải nhớ `.0` là gì, `.1` là gì. Struct giải quyết đúng chỗ đó:
+Bài [Biến](../learn_03_variables/README.md) đã giới thiệu tuple: gom nhiều giá trị, nhưng phải nhớ `.0` là gì, `.1` là gì. Struct giải quyết đúng chỗ đó:
 
 ```rust
 struct Point {
@@ -136,7 +136,7 @@ Quy tắc cần nhớ:
 
 Một giá trị struct **sở hữu** các trường của nó. Khi biến struct ra khỏi phạm vi, mọi trường được giải phóng theo. Đó là lý do trường văn bản thường là `String` (kiểu sở hữu chuỗi) chứ không phải `&str` (xem [mục 7.6](#76-string-hay-str-trong-struct)).
 
-Điều này cũng có nghĩa các quy tắc của [Ownership](../ownership/README.md) áp dụng nguyên vẹn: gán struct sang biến khác thì **chuyển** quyền sở hữu (xem [mục 7.1](#71-move-và-copy-với-struct)); muốn đọc mà không lấy đi thì **mượn** bằng `&`.
+Điều này cũng có nghĩa các quy tắc của [Ownership](../learn_05_ownership/README.md) áp dụng nguyên vẹn: gán struct sang biến khác thì **chuyển** quyền sở hữu (xem [mục 7.1](#71-move-và-copy-với-struct)); muốn đọc mà không lấy đi thì **mượn** bằng `&`.
 
 ---
 
@@ -521,7 +521,7 @@ help: consider changing this to be mutable
    |         +++
 ```
 
-Quy tắc này nhất quán với biến thường: `let` là bất biến, muốn đổi thì thêm `mut` (xem bài [Biến](../variables/README.md#33-biến-khả-biến-mut)).
+Quy tắc này nhất quán với biến thường: `let` là bất biến, muốn đổi thì thêm `mut` (xem bài [Biến](../learn_03_variables/README.md#33-biến-khả-biến-mut)).
 
 ### 4.5 In struct để gỡ lỗi
 
@@ -986,7 +986,7 @@ Bốn dòng cho cùng một kết quả. Dạng `Rectangle::area(&rect)` cho th�
 
 ## 6. Thực hành
 
-Hai bài thực hành có hướng dẫn: một hình chữ nhật (struct, `Debug`, method) và một tài khoản ngân hàng (`&mut self`, `self`, hàm tạo). Thực hiện trong `structs/src/main.rs` và chạy bằng `cargo run`.
+Hai bài thực hành có hướng dẫn: một hình chữ nhật (struct, `Debug`, method) và một tài khoản ngân hàng (`&mut self`, `self`, hàm tạo). Thực hiện trong `learn_06_structs/src/main.rs` và chạy bằng `cargo run`.
 
 ### Lab 1. Hình chữ nhật: struct, Debug và method
 
@@ -1161,7 +1161,7 @@ Nhận lại 300000 đồng
 
 - `BankAccount::new("An")` nhận `&str` (đọc chuỗi) nhưng lưu vào trường kiểu `String` bằng `String::from`. Struct cần **sở hữu** tên của nó (xem [mục 7.6](#76-string-hay-str-trong-struct)).
 - `deposit` và `withdraw` dùng `&mut self` nên biến phải khai báo `let mut account`.
-- `withdraw` kiểm tra `amount > self.balance` trước khi trừ. `balance` là `u64` (không âm), nên trừ quá số dư sẽ tràn số (xem [mục 6.5 của bài Biến](../variables/README.md#65-tràn-số-nguyên)).
+- `withdraw` kiểm tra `amount > self.balance` trước khi trừ. `balance` là `u64` (không âm), nên trừ quá số dư sẽ tràn số (xem [mục 6.5 của bài Biến](../learn_03_variables/README.md#65-tràn-số-nguyên)).
 - `summary` chỉ đọc nên dùng `&self`, gọi bao nhiêu lần cũng được.
 - `close` dùng `self`: sau khi gọi, `account` **không còn tồn tại**. Điều này hợp lý, vì tài khoản đã đóng thì không nên dùng tiếp.
 
@@ -1542,7 +1542,7 @@ fn main() {
 An
 ```
 
-Đừng lo nếu cú pháp `<'a>` còn lạ. Lifetime được giải thích ở bài [generics_traits_lifetimes](../generics_traits_lifetimes/README.md). Hiện tại hãy theo quy tắc:
+Đừng lo nếu cú pháp `<'a>` còn lạ. Lifetime được giải thích ở bài [generics_traits_lifetimes](../learn_10_generics_traits_lifetimes/README.md). Hiện tại hãy theo quy tắc:
 
 | Trường là | Dùng | Khi nào |
 |---|---|---|
@@ -1588,7 +1588,7 @@ Quy tắc ngón tay cái: nếu bạn phải viết chú thích để nhớ `.2`
 
 ### 8.1 Cách đọc thông báo lỗi
 
-Cách đọc một thông báo lỗi (mã lỗi, vị trí `-->`, nhãn `^^^^`, `help:`) đã được giải thích ở [mục 7.1 của bài Biến](../variables/README.md#71-cách-đọc-thông-báo-lỗi). Với struct, có thêm hai mẹo:
+Cách đọc một thông báo lỗi (mã lỗi, vị trí `-->`, nhãn `^^^^`, `help:`) đã được giải thích ở [mục 7.1 của bài Biến](../learn_03_variables/README.md#71-cách-đọc-thông-báo-lỗi). Với struct, có thêm hai mẹo:
 
 - Phần `note:` thường **trỏ tới chỗ định nghĩa struct hoặc method** liên quan, giúp bạn thấy ngay trường hay chữ ký nào đang bị dùng sai.
 - Phần `help:` hay đã viết sẵn đoạn code cần thêm (ví dụ `#[derive(Debug)]`, `mut`, `&'a`).
@@ -2508,7 +2508,7 @@ fn main() {
 
 Giải thích:
 
-- `transfer` nhận **hai tham chiếu `&mut`** tới hai tài khoản khác nhau nên được phép. Gọi `transfer(&mut an, &mut an, ...)` (cùng một biến hai lần) sẽ bị cấm, vì không được có hai tham chiếu `&mut` tới cùng một giá trị cùng lúc (quy tắc mượn của [Ownership](../ownership/README.md)).
+- `transfer` nhận **hai tham chiếu `&mut`** tới hai tài khoản khác nhau nên được phép. Gọi `transfer(&mut an, &mut an, ...)` (cùng một biến hai lần) sẽ bị cấm, vì không được có hai tham chiếu `&mut` tới cùng một giá trị cùng lúc (quy tắc mượn của [Ownership](../learn_05_ownership/README.md)).
 - `from.withdraw(amount)` vừa **thực hiện** việc trừ tiền vừa **báo** kết quả, nên `if` quyết định luôn có cộng tiền cho `to` hay không. Lần chuyển thứ hai thất bại (900000 > 200000) và không ai bị đổi số dư.
 
 </details>
@@ -2536,7 +2536,7 @@ Giải thích:
 | Riêng tư | Trường mặc định riêng tư ngoài module; dùng `pub` và getter |
 | Đặt tên | Kiểu `UpperCamelCase`; trường, method `snake_case`; hàm tạo `new` |
 
-Bài tiếp theo: [Enum và match](../enums_match/README.md).
+Bài tiếp theo: [Enum và match](../learn_07_enums_match/README.md).
 
 ---
 

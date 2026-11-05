@@ -6,10 +6,10 @@
 |---|---|
 | Chủ đề | Lỗi không khôi phục được (`panic!`), lỗi khôi phục được (`Result`, `Option`), toán tử `?`, enum lỗi, `Box<dyn Error>` |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `error_handling` (thư mục này) |
+| Dự án | `learn_09_error_handling` (thư mục này) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 9 |
-| Bài trước | [collections](../collections/README.md) |
-| Bài sau | [generics_traits_lifetimes](../generics_traits_lifetimes/README.md) |
+| Bài trước | [collections](../learn_08_collections/README.md) |
+| Bài sau | [generics_traits_lifetimes](../learn_10_generics_traits_lifetimes/README.md) |
 
 ## Mục lục
 
@@ -39,12 +39,12 @@ Sau bài học này bạn có thể:
 - [ ] Tự định nghĩa enum lỗi, dùng `From` để `?` tự đổi kiểu lỗi, biết khi nào dùng `Box<dyn Error>`.
 - [ ] Đọc hiểu và sửa các lỗi biên dịch phổ biến liên quan đến xử lý lỗi.
 
-**Kiến thức cần có.** Bạn đã biết `enum`, `match` (bài [enums_match](../enums_match/README.md)) và `Vec` (bài [collections](../collections/README.md)). Từ mục 6 trở đi có vài dòng `impl ... for ...`. Đó là *trait*, sẽ học kỹ ở bài sau; bài này chỉ yêu cầu chép đúng theo mẫu.
+**Kiến thức cần có.** Bạn đã biết `enum`, `match` (bài [enums_match](../learn_07_enums_match/README.md)) và `Vec` (bài [collections](../learn_08_collections/README.md)). Từ mục 6 trở đi có vài dòng `impl ... for ...`. Đó là *trait*, sẽ học kỹ ở bài sau; bài này chỉ yêu cầu chép đúng theo mẫu.
 
 **Cách dùng tài liệu.** Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd error_handling
+cd learn_09_error_handling
 cargo run
 ```
 
@@ -230,7 +230,7 @@ Thông báo panic gồm các phần sau:
 RUST_BACKTRACE=1 cargo run
 ```
 
-Cú pháp `TÊN=giá_trị lệnh` đặt biến môi trường chỉ cho riêng lệnh đó. Thử với đoạn mã sau (chạy ở chế độ debug bằng `cargo run`, trong dự án `error_handling`):
+Cú pháp `TÊN=giá_trị lệnh` đặt biến môi trường chỉ cho riêng lệnh đó. Thử với đoạn mã sau (chạy ở chế độ debug bằng `cargo run`, trong dự án `learn_09_error_handling`):
 
 ```rs
 fn chia(a: i32, b: i32) -> i32 {
@@ -921,7 +921,7 @@ Trong dự án thật, hai thư viện `thiserror` (viết enum lỗi gọn hơn
 
 ## 7. Thực hành
 
-Hai bài thực hành có hướng dẫn. Thực hiện trong `error_handling/src/main.rs` và chạy bằng `cargo run`. Để chạy được ngay mà không cần gõ từ bàn phím, các bài dùng danh sách chuỗi "giả lập" dữ liệu người dùng nhập.
+Hai bài thực hành có hướng dẫn. Thực hiện trong `learn_09_error_handling/src/main.rs` và chạy bằng `cargo run`. Để chạy được ngay mà không cần gõ từ bàn phím, các bài dùng danh sách chuỗi "giả lập" dữ liệu người dùng nhập.
 
 ### Lab 1. Kiểm tra số lượng nhập vào
 

@@ -6,8 +6,8 @@
 |---|---|
 | Chủ đề | `enum`, biến thể mang dữ liệu, `Option`, `match`, pattern, `if let`, `let else`, `while let`, `matches!`, giới thiệu `Result` |
 | Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `enums_match` (thư mục này) |
-| Bài trước | [structs](../structs/README.md) |
+| Dự án | `learn_07_enums_match` (thư mục này) |
+| Bài trước | [structs](../learn_06_structs/README.md) |
 | Nguồn tham khảo chính | *The Rust Programming Language*, chương 6 và chương 19 (mục 19.1, 19.3) |
 
 ## Mục lục
@@ -42,7 +42,7 @@ Sau bài học này bạn có thể:
 **Cách dùng tài liệu.** Chép từng ví dụ vào `src/main.rs` rồi chạy:
 
 ```bash
-cd enums_match
+cd learn_07_enums_match
 cargo run
 ```
 
@@ -982,13 +982,13 @@ Bỏ qua "abc": không phải số
 Tổng: 19
 ```
 
-Cách xử lý lỗi bài bản (toán tử `?`, kiểu lỗi riêng...) được học ở bài [error_handling](../error_handling/README.md).
+Cách xử lý lỗi bài bản (toán tử `?`, kiểu lỗi riêng...) được học ở bài [error_handling](../learn_09_error_handling/README.md).
 
 ---
 
 ## 7. Thực hành
 
-Ba bài thực hành có hướng dẫn. Thực hiện trong `enums_match/src/main.rs` và chạy bằng `cargo run`.
+Ba bài thực hành có hướng dẫn. Thực hiện trong `learn_07_enums_match/src/main.rs` và chạy bằng `cargo run`.
 
 ### Lab 1. Trạng thái đơn hàng: enum có dữ liệu, impl, match
 
@@ -1530,7 +1530,7 @@ fn main() {
 
 ### 9.1 Cách đọc thông báo lỗi liên quan đến match
 
-Cách đọc chung (mã lỗi, vị trí, dấu `^^^`, `help:`) đã nêu ở [bài biến](../variables/README.md#71-cách-đọc-thông-báo-lỗi). Với `enum` và `match`, các cụm từ sau xuất hiện nhiều nhất:
+Cách đọc chung (mã lỗi, vị trí, dấu `^^^`, `help:`) đã nêu ở [bài biến](../learn_03_variables/README.md#71-cách-đọc-thông-báo-lỗi). Với `enum` và `match`, các cụm từ sau xuất hiện nhiều nhất:
 
 | Cụm từ trong thông báo | Nghĩa |
 |---|---|
