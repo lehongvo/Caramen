@@ -424,7 +424,7 @@ error[E0382]: borrow of moved value: `user1.username`
    = note: move occurs because `user1.username` has type `String`, which does not implement the `Copy` trait
 ```
 
-Nếu bạn tự cung cấp **mọi trường kiểu không `Copy`** (ở đây là `username` và `email`) thì chỉ còn các trường `Copy` được lấy từ struct cũ, nên struct cũ vẫn dùng được nguyên vẹn:
+Nếu bạn tự cung cấp **mọi trường kiểu không** `Copy` (ở đây là `username` và `email`) thì chỉ còn các trường `Copy` được lấy từ struct cũ, nên struct cũ vẫn dùng được nguyên vẹn:
 
 ```rust
 struct User {
@@ -619,7 +619,7 @@ fn main() {
 60 x 50
 ```
 
-**Đầu ra của `dbg!` (ghi ra stderr, hiện ngay trong terminal):**
+**Đầu ra của** `dbg!` **(ghi ra stderr, hiện ngay trong terminal):**
 
 ```text
 [src/main.rs:10:16] 30 * scale = 60
@@ -676,7 +676,7 @@ Method:     1500
 
 Những điểm cần nhớ:
 
-- `impl Rectangle { ... }` nghĩa là mọi thứ bên trong **thuộc về kiểu `Rectangle`**.
+- `impl Rectangle { ... }` nghĩa là mọi thứ bên trong **thuộc về kiểu** `Rectangle`.
 - **Method** là hàm có tham số đầu tiên tên `self`, đại diện cho giá trị đang gọi method. Gọi bằng dấu chấm: `rect.area()`.
 - `&self` là cách viết ngắn của `self: &Self`. `Self` là **bí danh** của kiểu đang được `impl`, ở đây là `Rectangle`.
 - Cách gọi `rect.area()` dễ đọc hơn `area_fn(&rect)`, và mọi hành vi của kiểu nằm cùng một chỗ, dễ tìm.
@@ -789,7 +789,7 @@ note: `Rectangle::into_square` takes ownership of the receiver `self`, which mov
 
 ### 5.3 Associated function
 
-Hàm trong `impl` mà **không có tham số `self`** gọi là **associated function** (hàm liên kết). Nó thuộc về kiểu chứ không thuộc về một giá trị cụ thể, nên gọi bằng `Kiểu::tên_hàm(...)` (hai dấu hai chấm), không phải dấu chấm.
+Hàm trong `impl` mà **không có tham số** `self` gọi là **associated function** (hàm liên kết). Nó thuộc về kiểu chứ không thuộc về một giá trị cụ thể, nên gọi bằng `Kiểu::tên_hàm(...)` (hai dấu hai chấm), không phải dấu chấm.
 
 Cách dùng phổ biến nhất là viết **hàm tạo** (*constructor*). Rust không có từ khoá riêng cho hàm tạo; theo quy ước, hàm tạo được đặt tên là `new`.
 
@@ -910,7 +910,7 @@ Method kiểu này gọi là **getter**: trả về giá trị của một trư�
 
 ### 5.6 Nhiều khối `impl`
 
-Một kiểu có thể có **nhiều khối `impl`**. Chúng được gộp lại như một. Cách này hợp lệ nhưng ít cần thiết với struct đơn giản; về sau nó được dùng để nhóm method theo chức năng hoặc theo trait.
+Một kiểu có thể có **nhiều khối** `impl`. Chúng được gộp lại như một. Cách này hợp lệ nhưng ít cần thiết với struct đơn giản; về sau nó được dùng để nhóm method theo chức năng hoặc theo trait.
 
 ```rust
 struct Rectangle {
@@ -962,7 +962,7 @@ impl Rectangle {
 
 fn main() {
     let rect = Rectangle { width: 3, height: 4 };
-    let r = &rect; // r là tham chiếu tới rect
+    let r = ▭ // r là tham chiếu tới rect
 
     println!("{}", rect.area());
     println!("{}", Rectangle::area(&rect)); // dạng viết đầy đủ
@@ -1216,7 +1216,7 @@ note: if `Student` implemented `Clone`, you could clone the value
    |             - you could clone this value
 ```
 
-Có hai cách để giữ lại cả hai bản. Cách thứ nhất là **`Clone`**: tạo bản sao tường minh bằng `.clone()`.
+Có hai cách để giữ lại cả hai bản. Cách thứ nhất là `Clone`: tạo bản sao tường minh bằng `.clone()`.
 
 ```rust
 #[derive(Debug, Clone)]
@@ -1241,7 +1241,7 @@ Student { name: "An", age: 20 } Student { name: "An", age: 20 }
 An 20
 ```
 
-Cách thứ hai là **`Copy`**: gán sẽ tự **sao chép** thay vì chuyển, không cần gọi `.clone()`. Chỉ dùng được khi **mọi trường đều là `Copy`** (số, `bool`, `char`...).
+Cách thứ hai là `Copy`: gán sẽ tự **sao chép** thay vì chuyển, không cần gọi `.clone()`. Chỉ dùng được khi **mọi trường đều là** `Copy` (số, `bool`, `char`...).
 
 ```rust
 #[derive(Debug, Clone, Copy)]
@@ -1494,7 +1494,7 @@ help: a method `balance` also exists, call it with parentheses
 
 ### 7.6 `String` hay `&str` trong struct
 
-Cho trường văn bản, hãy dùng **`String`**: struct sở hữu dữ liệu của nó, đơn giản và an toàn. Dùng `&str` trực tiếp sẽ lỗi:
+Cho trường văn bản, hãy dùng `String`: struct sở hữu dữ liệu của nó, đơn giản và an toàn. Dùng `&str` trực tiếp sẽ lỗi:
 
 ```rust
 struct User {
@@ -1663,7 +1663,7 @@ help: a field with a similar name exists
    |
 ```
 
-**Quên `self` trong method:**
+**Quên** `self` **trong method:**
 
 ```rust
 struct Rectangle {
@@ -1712,7 +1712,7 @@ help: use associated function syntax instead
 
 Hàm không có `self` là associated function nên phải gọi bằng `Rectangle::area(30, 50)`. Muốn gọi bằng dấu chấm, hãy đổi chữ ký thành `fn area(&self) -> u32`.
 
-**Quên `mut` khi gọi method `&mut self`:**
+**Quên** `mut` **khi gọi method** `&mut self`**:**
 
 ```rust
 struct Counter {
@@ -1751,7 +1751,7 @@ help: consider changing this to be mutable
    |         +++
 ```
 
-**Trả về `String` từ trường khi chỉ có `&self`:**
+**Trả về** `String` **từ trường khi chỉ có** `&self`**:**
 
 ```rust
 struct Student {
@@ -1918,8 +1918,7 @@ Sách: Lập trình Rust, 550 trang, đã đọc: false
 
 **Gợi ý:** trường văn bản dùng `String`, tạo bằng `String::from("...")`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Book {
@@ -1939,7 +1938,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 1.2. Sửa lỗi khả biến
 
@@ -1972,8 +1971,7 @@ Năm sau An có tuổi 21
 
 **Gợi ý:** đọc dòng `help:` trong thông báo lỗi. Có thể chỉ cho trường `age` là `mut` không?
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Student {
@@ -1995,7 +1993,7 @@ fn main() {
 
 Phải khai báo `mut` cho **cả biến** `student`. Rust không có cách đánh dấu `mut` riêng cho một trường.
 
-</details>
+
 
 #### Bài 1.3. Tuple struct
 
@@ -2009,8 +2007,7 @@ rgb(255, 165, 0) = #FFA500
 
 **Gợi ý:** `{:02X}` in số dưới dạng hex chữ hoa, đủ ít nhất 2 chữ số (thêm số 0 phía trước nếu thiếu). Có thể viết kèm tên biến: `{r:02X}`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Rgb(u8, u8, u8);
@@ -2023,7 +2020,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 ### Cấp độ 2. Vận dụng
 
@@ -2049,8 +2046,7 @@ fn main() {
 }
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 **Kết quả:**
 
@@ -2062,7 +2058,7 @@ fn main() {
 
 Giải thích: chương trình biên dịch được. Mọi trường của `Settings` đều là kiểu `Copy` (`u8`, `bool`), nên `..base` và `..night` chỉ **sao chép** giá trị chứ không chuyển đi. Vì vậy `base` và `night` vẫn dùng được nguyên vẹn sau đó. Nếu `Settings` có thêm một trường `String` được lấy từ `..base` thì `base` sẽ bị chuyển đi (xem [mục 4.3](#43-cập-nhật-struct-từ-struct-cũ)).
 
-</details>
+
 
 #### Bài 2.2. Method trên hình tròn
 
@@ -2076,8 +2072,7 @@ Bán kính 2.5: diện tích 19.63, chu vi 15.71
 
 **Gợi ý:** dùng `std::f64::consts::PI`. Diện tích là `π × r²`, chu vi là `2 × π × r`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::f64::consts::PI;
@@ -2112,7 +2107,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 2.3. Tuple struct với method
 
@@ -2126,8 +2121,7 @@ fn main() {
 
 **Gợi ý:** trong method, giá trị bên trong tuple struct là `self.0`. Viết `9.0 / 5.0`, không viết `9 / 5`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Celsius(f64);
@@ -2144,7 +2138,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 2.4. Bộ đếm với `&mut self`
 
@@ -2176,8 +2170,7 @@ Sau khi reset: 0
 
 **Gợi ý:** `increment` và `reset` sửa dữ liệu, nên dùng `&mut self`; `value` chỉ đọc, nên dùng `&self`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Counter {
@@ -2214,7 +2207,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 2.5. Sửa lỗi dùng sau khi chuyển
 
@@ -2248,8 +2241,7 @@ Vé 7 của An
 
 **Gợi ý:** method chỉ cần **đọc** dữ liệu. Dạng `self` nào phù hợp?
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Ticket {
@@ -2272,7 +2264,7 @@ fn main() {
 
 Đổi `self` thành `&self`: method chỉ mượn, nên `ticket` vẫn còn sau mỗi lần gọi. Chỉ dùng `self` khi method thật sự cần tiêu thụ giá trị.
 
-</details>
+
 
 ### Cấp độ 3. Thử thách
 
@@ -2288,8 +2280,7 @@ fn main() {
 
 **Gợi ý:** độ dài là `√(dx² + dy²)` với `dx = end.x - start.x`. Số thực có method `.sqrt()`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Point {
@@ -2329,7 +2320,7 @@ fn main() {
 
 Giải thích: `dx = 3`, `dy = 4`, `√(9 + 16) = √25 = 5`.
 
-</details>
+
 
 #### Bài 3.2. Bốn đoạn mã, bốn lỗi
 
@@ -2410,8 +2401,7 @@ fn main() {
 }
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 | Đoạn | Lỗi | Nguyên nhân | Cách sửa |
 |---|---|---|---|
@@ -2420,7 +2410,7 @@ fn main() {
 | (c) | `E0599` no method named `new` found | `new` là associated function (không có `self`), không gọi được bằng dấu chấm trên giá trị | Gọi `Point::new(3, 4)` |
 | (d) | `E0277` `Point` doesn't implement `std::fmt::Display` | `{}` cần kiểu có `Display`, struct không tự có | In từng trường (`p.x`, `p.y`), hoặc `#[derive(Debug)]` và dùng `{:?}` |
 
-</details>
+
 
 #### Bài 3.3. Chuyển tiền giữa hai tài khoản
 
@@ -2450,8 +2440,7 @@ Binh: 300000 đồng
 
 **Gợi ý:** `withdraw` đã trả về `bool` cho biết có trừ được tiền hay không. Hãy dựa vào nó để quyết định có `deposit` vào `to` hay không.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct BankAccount {
@@ -2508,10 +2497,10 @@ fn main() {
 
 Giải thích:
 
-- `transfer` nhận **hai tham chiếu `&mut`** tới hai tài khoản khác nhau nên được phép. Gọi `transfer(&mut an, &mut an, ...)` (cùng một biến hai lần) sẽ bị cấm, vì không được có hai tham chiếu `&mut` tới cùng một giá trị cùng lúc (quy tắc mượn của [Ownership](../learn_05_ownership/README.md)).
+- `transfer` nhận **hai tham chiếu** `&mut` tới hai tài khoản khác nhau nên được phép. Gọi `transfer(&mut an, &mut an, ...)` (cùng một biến hai lần) sẽ bị cấm, vì không được có hai tham chiếu `&mut` tới cùng một giá trị cùng lúc (quy tắc mượn của [Ownership](../learn_05_ownership/README.md)).
 - `from.withdraw(amount)` vừa **thực hiện** việc trừ tiền vừa **báo** kết quả, nên `if` quyết định luôn có cộng tiền cho `to` hay không. Lần chuyển thứ hai thất bại (900000 > 200000) và không ai bị đổi số dư.
 
-</details>
+
 
 ---
 
@@ -2549,7 +2538,7 @@ Bài tiếp theo: [Enum và match](../learn_07_enums_match/README.md).
 - [Rust By Example, Methods](https://doc.rust-lang.org/rust-by-example/fn/methods.html)
 - [The Rust Reference, Structs](https://doc.rust-lang.org/reference/items/structs.html)
 - [The Rust Reference, Implementations](https://doc.rust-lang.org/reference/items/implementations.html)
-- [Tài liệu thư viện chuẩn, macro `dbg!`](https://doc.rust-lang.org/std/macro.dbg.html)
-- [Tài liệu thư viện chuẩn, trait `Debug`](https://doc.rust-lang.org/std/fmt/trait.Debug.html)
+- [Tài liệu thư viện chuẩn, macro](https://doc.rust-lang.org/std/macro.dbg.html) `dbg!`
+- [Tài liệu thư viện chuẩn, trait](https://doc.rust-lang.org/std/fmt/trait.Debug.html) `Debug`
 - [Rust API Guidelines, Naming](https://rust-lang.github.io/api-guidelines/naming.html)
 - [Tra cứu mã lỗi, ví dụ E0063](https://doc.rust-lang.org/error_codes/E0063.html)
