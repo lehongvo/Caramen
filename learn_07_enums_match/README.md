@@ -235,7 +235,7 @@ Viết `Self::Penny` hay `Coin::Penny` đều được. `&self` mượn giá tr�
 
 Nhiều ngôn ngữ cho phép một biến mang giá trị `null` (hoặc `nil`, `None`...) nghĩa là "không có gì". Nếu bạn quên kiểm tra rồi dùng giá trị `null` như một giá trị thật, chương trình sẽ lỗi lúc chạy. Tony Hoare, người phát minh ra tham chiếu `null`, gọi đó là "sai lầm tỉ đô" của ông.
 
-Rust **không có `null`**. Ý "có thể có hoặc không có giá trị" được viết ngay trong kiểu bằng `Option<T>`. Nhờ đó trình biên dịch biết giá trị nào có thể vắng mặt và **bắt bạn xử lý trường hợp vắng mặt** trước khi dùng.
+Rust **không có** `null`. Ý "có thể có hoặc không có giá trị" được viết ngay trong kiểu bằng `Option<T>`. Nhờ đó trình biên dịch biết giá trị nào có thể vắng mặt và **bắt bạn xử lý trường hợp vắng mặt** trước khi dùng.
 
 ### 3.2 Định nghĩa `Option<T>`
 
@@ -344,10 +344,10 @@ true true
 
 Hai phương thức nguy hiểm cần biết:
 
-| Phương thức | Khi là `None` | Khi dùng |
-|---|---|---|
-| `unwrap()` | **Panic** với thông báo ``called `Option::unwrap()` on a `None` value`` | Chỉ trong thử nghiệm hoặc khi chắc chắn không thể là `None` |
-| `expect("lời nhắn")` | **Panic** với lời nhắn của bạn | Như trên, nhưng lời nhắn giúp tìm lỗi nhanh hơn |
+| Phương thức          | Khi là `None`                                                         | Khi dùng                                                    |
+| -------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `unwrap()`           | **Panic** với thông báo `called `Option::unwrap()` on a `None` value` | Chỉ trong thử nghiệm hoặc khi chắc chắn không thể là `None` |
+| `expect("lời nhắn")` | **Panic** với lời nhắn của bạn                                        | Như trên, nhưng lời nhắn giúp tìm lỗi nhanh hơn             |
 
 Trong chương trình thật, ưu tiên `match`, `unwrap_or` hoặc `if let` (xem [mục 5](#5-cú-pháp-ngắn-gọn)) thay vì `unwrap`.
 
@@ -461,12 +461,7 @@ Thứ 6 là cuối tuần
 Pattern có thể **tách** dữ liệu mà biến thể mang theo và gán vào biến mới. Đây là cách chính để dùng giá trị trong `Option` hoặc trong enum có dữ liệu.
 
 ```rust
-fn plus_one(x: Option<i32>) -> Option<i32> {
-    match x {
-        None => None,
-        Some(i) => Some(i + 1),
-    }
-}
+≈
 
 fn main() {
     println!("{:?}", plus_one(Some(5)));
@@ -569,7 +564,7 @@ Với số nguyên và `char`, luôn cần nhánh bắt tất cả vì không th
 | Tách enum | `Some(n)`, `Message::Move { x, y }` | Đúng biến thể; lấy dữ liệu bên trong |
 | Bỏ qua phần còn lại | `..` | Mọi trường (hoặc phần tử) còn lại |
 
-**Giá trị, `|` và khoảng:**
+**Giá trị,** `|` **và khoảng:**
 
 ```rust
 fn classify(n: i32) -> &'static str {
@@ -611,7 +606,7 @@ chữ cái chữ số ký tự khác
 
 > `&'static str` nghĩa là chuỗi nằm sẵn trong chương trình (như `"âm"`) và sống suốt thời gian chạy. Hàm không có tham số tham chiếu mà trả về `&str` thì cần ghi `'static`. Chi tiết ở bài lifetimes.
 
-**Điều kiện `if` (guard):** thêm điều kiện sau pattern. Nhánh chỉ chạy khi cả pattern lẫn điều kiện đều đúng.
+**Điều kiện** `if` **(guard):** thêm điều kiện sau pattern. Nhánh chỉ chạy khi cả pattern lẫn điều kiện đều đúng.
 
 ```rust
 fn parity(x: Option<i32>) -> String {
@@ -639,7 +634,7 @@ không có số
 
 Compiler **không** xét điều kiện của guard khi kiểm tra tính đầy đủ, nên vẫn cần nhánh `Some(n)` không có `if` để bao phủ phần còn lại.
 
-**`@` (gán tên và kiểm tra khoảng):**
+`@` **(gán tên và kiểm tra khoảng):**
 
 ```rust
 fn age_group(age: u32) -> String {
@@ -695,7 +690,7 @@ fn main() {
 (1, 2): điểm (1, 2)
 ```
 
-**Tách struct và bỏ qua phần còn lại với `..`:**
+**Tách struct và bỏ qua phần còn lại với** `..`**:**
 
 ```rust
 struct Point {
@@ -1532,17 +1527,17 @@ fn main() {
 
 Cách đọc chung (mã lỗi, vị trí, dấu `^^^`, `help:`) đã nêu ở [bài biến](../learn_03_variables/README.md#71-cách-đọc-thông-báo-lỗi). Với `enum` và `match`, các cụm từ sau xuất hiện nhiều nhất:
 
-| Cụm từ trong thông báo | Nghĩa |
-|---|---|
-| `non-exhaustive patterns: ... not covered` | `match` thiếu một số trường hợp (liệt kê ngay sau dấu hai chấm) |
-| `` `match` arms have incompatible types `` | Các nhánh trả về kiểu khác nhau |
-| `pattern binding ... is named the same as one of the variants` | Quên tiền tố `TênEnum::`, nên pattern bị hiểu là tên biến |
-| `borrow of partially moved value` | `match` đã chuyển (move) dữ liệu ra khỏi giá trị gốc |
-| ``expected `Option<T>`, found ...`` | Quên bọc giá trị trong `Some(...)` |
+| Cụm từ trong thông báo                                         | Nghĩa                                                           |
+| -------------------------------------------------------------- | --------------------------------------------------------------- |
+| `non-exhaustive patterns: ... not covered`                     | `match` thiếu một số trường hợp (liệt kê ngay sau dấu hai chấm) |
+| ``match` arms have incompatible types`                         | Các nhánh trả về kiểu khác nhau                                 |
+| `pattern binding ... is named the same as one of the variants` | Quên tiền tố `TênEnum::`, nên pattern bị hiểu là tên biến       |
+| `borrow of partially moved value`                              | `match` đã chuyển (move) dữ liệu ra khỏi giá trị gốc            |
+| `expected `Option<T>`, found ...`                              | Quên bọc giá trị trong `Some(...)`                              |
 
 ### 9.2 Lỗi biên dịch hay gặp nhất
 
-**1. `E0004`: `match` thiếu trường hợp.** Với số nguyên, ký tự hay chuỗi luôn cần nhánh bắt tất cả:
+**1.** `E0004`**:** `match` **thiếu trường hợp.** Với số nguyên, ký tự hay chuỗi luôn cần nhánh bắt tất cả:
 
 ```rust
 fn main() {
@@ -1576,7 +1571,7 @@ help: ensure that all possible cases are being handled by adding a match arm wit
 
 Cách sửa: thêm `_ => "nhiều"` ở cuối.
 
-**2. `E0308`: các nhánh `match` trả về kiểu khác nhau.** `match` là biểu thức nên mọi nhánh phải cùng kiểu:
+**2.** `E0308`**: các nhánh** `match` **trả về kiểu khác nhau.** `match` là biểu thức nên mọi nhánh phải cùng kiểu:
 
 ```rust
 fn main() {
@@ -1611,7 +1606,7 @@ error[E0308]: `match` arms have incompatible types
 
 Cách sửa: đổi `2` thành `"hai"` (hoặc cho mọi nhánh cùng một kiểu khác).
 
-**3. `E0308`: quên bọc giá trị trong `Some`.**
+**3.** `E0308`**: quên bọc giá trị trong** `Some`**.**
 
 ```rust
 fn main() {
@@ -1641,7 +1636,7 @@ help: try wrapping the expression in `Some`
 
 Cách sửa: viết `Some(5)`, đúng như gợi ý `help:`.
 
-**4. `E0170`: quên tiền tố, pattern thành tên biến.** Đây là lỗi dễ gây bối rối nhất:
+**4.** `E0170`**: quên tiền tố, pattern thành tên biến.** Đây là lỗi dễ gây bối rối nhất:
 
 ```rust
 enum Direction {
@@ -1679,16 +1674,16 @@ Vì `North` không có tiền tố và chưa được `use`, Rust hiểu đó l�
 
 ### 9.3 Các lỗi khác
 
-| Mã lỗi | Thông báo (rút gọn) | Nguyên nhân | Cách sửa |
-|---|---|---|---|
-| `E0277` | `` cannot add `Option<i32>` to `i32` `` | Cộng `i32` với `Option<i32>` ([mục 3.3](#33-optioni32-không-phải-i32)); đảo vế (`Option<i32> + 1`) thì báo `E0369` | `match`, `unwrap_or`... lấy giá trị ra trước |
-| `E0282` | `` type annotations needed for `Option<_>` `` | `let x = None;` không cho compiler biết kiểu bên trong | `let x: Option<i32> = None;` |
-| `E0599` | `` no variant, associated function, or constant named `Nort` found for enum `Direction` `` | Gõ sai tên biến thể | Sửa chính tả; compiler gợi ý tên gần giống |
-| `E0023` | `this pattern has 2 fields, but the corresponding tuple variant has 3 fields` | Pattern không đủ số trường của biến thể | Ghi đủ trường, dùng `_` hoặc `..` cho trường bỏ qua |
-| `E0369` | `` binary operation `==` cannot be applied to type `Light` `` | Enum chưa có `PartialEq` | Thêm `#[derive(PartialEq)]`, hoặc dùng `matches!` |
-| `E0277` | `` `Direction` doesn't implement `Debug` `` | In bằng `{:?}` mà enum chưa có `Debug` | Thêm `#[derive(Debug)]` |
-| `E0308` | `` `else` clause of `let...else` does not diverge `` | Khối `else` của `let else` không thoát | Thêm `return`, `continue`, `break` hoặc `panic!` |
-| `E0382` | `` borrow of partially moved value: `name` `` | `match` chuyển dữ liệu ra khỏi giá trị gốc ([mục 8.4](#84-match-và-quyền-sở-hữu)) | `match &name`, hoặc `name.as_ref()` |
+| Mã lỗi  | Thông báo (rút gọn)                                                                    | Nguyên nhân                                                                                                        | Cách sửa                                            |
+| ------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `E0277` | `cannot add `Option<i32>` to `i32``                                                    | Cộng `i32` với `Option<i32>` ([mục 3.3](#33-optioni32-không-phải-i32)); đảo vế (`Option<i32> + 1`) thì báo `E0369` | `match`, `unwrap_or`... lấy giá trị ra trước        |
+| `E0282` | `type annotations needed for `Option<_>``                                              | `let x = None;` không cho compiler biết kiểu bên trong                                                             | `let x: Option<i32> = None;`                        |
+| `E0599` | `no variant, associated function, or constant named `Nort` found for enum `Direction`` | Gõ sai tên biến thể                                                                                                | Sửa chính tả; compiler gợi ý tên gần giống          |
+| `E0023` | `this pattern has 2 fields, but the corresponding tuple variant has 3 fields`          | Pattern không đủ số trường của biến thể                                                                            | Ghi đủ trường, dùng `_` hoặc `..` cho trường bỏ qua |
+| `E0369` | `binary operation `==` cannot be applied to type `Light``                              | Enum chưa có `PartialEq`                                                                                           | Thêm `#[derive(PartialEq)]`, hoặc dùng `matches!`   |
+| `E0277` | ``Direction` doesn't implement `Debug``                                                | In bằng `{:?}` mà enum chưa có `Debug`                                                                             | Thêm `#[derive(Debug)]`                             |
+| `E0308` | ``else` clause of `let...else` does not diverge`                                       | Khối `else` của `let else` không thoát                                                                             | Thêm `return`, `continue`, `break` hoặc `panic!`    |
+| `E0382` | `borrow of partially moved value: `name``                                              | `match` chuyển dữ liệu ra khỏi giá trị gốc ([mục 8.4](#84-match-và-quyền-sở-hữu))                                  | `match &name`, hoặc `name.as_ref()`                 |
 
 > Các thông báo trên được lấy từ Rust 1.99.1. Câu chữ và mã lỗi có thể khác chút giữa các phiên bản compiler.
 
@@ -1714,12 +1709,12 @@ fn main() {
 }
 ```
 
-| Cảnh báo | Ý nghĩa | Cách xử lý |
-|---|---|---|
-| `unreachable pattern` | Nhánh nằm sau nhánh bắt tất cả (`_`) nên không bao giờ chạy | Đổi thứ tự (nhánh cụ thể trước, `_` sau cùng) hoặc xoá nhánh thừa |
-| `` unused variable: `radius` `` | Tên đặt trong pattern nhưng không dùng | Dùng nó, hoặc viết `_radius` / `_` |
-| ``variant `Unused` is never constructed`` | Biến thể không được tạo ở đâu trong chương trình | Xoá, hoặc tạo giá trị đó ở chỗ cần |
-| ``type `shape` should have an upper camel case name`` | Tên enum sai quy ước | Đổi thành `Shape` |
+| Cảnh báo                                            | Ý nghĩa                                                     | Cách xử lý                                                        |
+| --------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------- |
+| `unreachable pattern`                               | Nhánh nằm sau nhánh bắt tất cả (`_`) nên không bao giờ chạy | Đổi thứ tự (nhánh cụ thể trước, `_` sau cùng) hoặc xoá nhánh thừa |
+| `unused variable: `radius``                         | Tên đặt trong pattern nhưng không dùng                      | Dùng nó, hoặc viết `_radius` / `_`                                |
+| `variant `Unused` is never constructed`             | Biến thể không được tạo ở đâu trong chương trình            | Xoá, hoặc tạo giá trị đó ở chỗ cần                                |
+| `type `shape` should have an upper camel case name` | Tên enum sai quy ước                                        | Đổi thành `Shape`                                                 |
 
 ---
 
@@ -1743,8 +1738,7 @@ Xanh: đi
 
 **Gợi ý:** dùng `match` trên `light`, mỗi biến thể một nhánh.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 enum TrafficLight {
@@ -1768,7 +1762,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 1.2. Sửa lỗi match thiếu nhánh
 
@@ -1809,8 +1803,7 @@ Thu: mát
 
 **Gợi ý:** thông báo `E0004` cho biết biến thể nào chưa được xử lý.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 Thêm nhánh cho `Season::Winter`:
 
@@ -1841,7 +1834,7 @@ fn main() {
 
 Cũng có thể sửa bằng nhánh `_ => "lạnh"`, nhưng nhánh liệt kê rõ `Season::Winter` tốt hơn: sau này thêm mùa mới, compiler vẫn nhắc bạn.
 
-</details>
+
 
 #### Bài 1.3. Option cơ bản
 
@@ -1856,8 +1849,7 @@ Chào bạn
 
 **Gợi ý:** `unwrap_or` cho giá trị mặc định khi là `None`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 **Cách 1:** `unwrap_or`.
 
@@ -1889,7 +1881,7 @@ fn main() {
 
 Cả hai cho cùng kết quả. `unwrap_or` ngắn hơn khi chỉ cần một giá trị mặc định.
 
-</details>
+
 
 ### Cấp độ 2. Vận dụng
 
@@ -1907,8 +1899,7 @@ Square(5.0): diện tích 25.00
 
 **Gợi ý:** số π là `std::f64::consts::PI`. Trong `match self`, các biến lấy từ tham chiếu có kiểu `&f64`; dấu `*` lấy giá trị bên trong.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::f64::consts::PI;
@@ -1948,7 +1939,7 @@ fn main() {
 
 Giải thích: thư viện chuẩn có sẵn phép nhân giữa `f64` và `&f64`, nên `PI * radius * radius` chạy mà không cần `*`. Trường hợp cần chính giá trị (ví dụ `Celsius(c) => *c` ở Bài 2.4) thì dùng `*`.
 
-</details>
+
 
 #### Bài 2.2. Số chẵn đầu tiên
 
@@ -1963,8 +1954,7 @@ Không có số chẵn nào
 
 **Gợi ý:** `for &item in items` lấy từng phần tử `i32` (pattern `&item` tách tham chiếu). Gặp số chẵn thì `return Some(item)`; hết vòng lặp thì `None`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn first_even(items: &[i32]) -> Option<i32> {
@@ -1992,7 +1982,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 2.3. Xếp loại điểm
 
@@ -2010,8 +2000,7 @@ fn main() {
 
 **Gợi ý:** dùng pattern khoảng `a..=b` và nhánh `_` cuối cùng.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn grade(score: u32) -> &'static str {
@@ -2033,7 +2022,7 @@ fn main() {
 
 Giải thích: `101` không rơi vào khoảng nào nên vào nhánh `_`. Với `u32`, không cần xét số âm vì kiểu không dấu đã loại chúng.
 
-</details>
+
 
 #### Bài 2.4. Enum có phương thức
 
@@ -2048,8 +2037,7 @@ Giải thích: `101` không rơi vào khoảng nào nên vào nhánh `_`. Với 
 
 **Gợi ý:** trong `match self`, biến lấy ra có kiểu `&f64`. Với nhánh `Celsius(c)` cần trả `f64` nên viết `*c`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 enum Temperature {
@@ -2075,7 +2063,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 2.5. let else
 
@@ -2090,8 +2078,7 @@ abc: không phải số
 
 **Gợi ý:** `let Ok(n) = text.parse::<i32>() else { return ...; };`
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn double(text: &str) -> String {
@@ -2110,7 +2097,7 @@ fn main() {
 
 Giải thích: nếu `parse` trả về `Ok(n)` thì `n` dùng được ngay ở các dòng sau; nếu `Err` thì khối `else` chạy và `return` thoát hàm.
 
-</details>
+
 
 ### Cấp độ 3. Thử thách
 
@@ -2130,8 +2117,7 @@ Giải thích: nếu `parse` trả về `Ok(n)` thì `n` dùng được ngay ở
 
 **Gợi ý:** trong `apply`, đặt nhánh `Op::Div if b == 0.0 => None` **trước** nhánh `Op::Div` thường. Dùng `for (op, b) in cases` để tách tuple.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 #[derive(Clone, Copy)]
@@ -2184,7 +2170,7 @@ fn main() {
 
 Giải thích: `Op` có `Copy` nên `op` dùng được hai lần (`apply` rồi `symbol`) mà không bị move. Với `{}`, số thực `17.0` được in là `17`.
 
-</details>
+
 
 #### Bài 3.2. Bốn đoạn mã, bốn lỗi
 
@@ -2258,8 +2244,7 @@ fn main() {
 }
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 | Đoạn | Lỗi | Nguyên nhân | Cách sửa |
 |---|---|---|---|
@@ -2268,7 +2253,7 @@ fn main() {
 | (c) | `E0023` this pattern has 1 field, but the corresponding tuple variant has 2 fields | Pattern `Rectangle(w)` thiếu một trường | `Shape::Rectangle(w, h) => w * h` |
 | (d) | `E0382` borrow of partially moved value | `if let Some(n) = name` chuyển `String` vào `n` | `if let Some(n) = &name` để chỉ mượn |
 
-</details>
+
 
 #### Bài 3.3. Phân tích lệnh
 
@@ -2286,8 +2271,7 @@ fn main() {
 
 **Gợi ý:** `input.split_once(' ')` trả về `Option<(&str, &str)>`, tách chuỗi ở dấu cách đầu tiên. Có thể khớp thẳng pattern như `Some(("go", steps))`. Để đổi `steps` thành số: `steps.parse().ok()` cho `Option<u32>`, rồi `.map(Command::Go)`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 enum Command {
@@ -2324,7 +2308,7 @@ Giải thích:
 - `steps.parse().ok()` đổi `Result` thành `Option`: `"abc"` cho `None`, nên `map` bỏ qua và kết quả là `None`.
 - `Command::Go` dùng như một hàm `u32 -> Command`, nên `.map(Command::Go)` gọn hơn `.map(|n| Command::Go(n))`.
 
-</details>
+
 
 ---
 
@@ -2360,8 +2344,8 @@ Giải thích:
 - [Rust By Example, Enums](https://doc.rust-lang.org/rust-by-example/custom_types/enum.html)
 - [Rust By Example, match](https://doc.rust-lang.org/rust-by-example/flow_control/match.html)
 - [The Rust Reference, Patterns](https://doc.rust-lang.org/reference/patterns.html)
-- [Tài liệu thư viện chuẩn, `Option`](https://doc.rust-lang.org/std/option/enum.Option.html)
-- [Tài liệu thư viện chuẩn, `Result`](https://doc.rust-lang.org/std/result/enum.Result.html)
-- [Tài liệu thư viện chuẩn, macro `matches!`](https://doc.rust-lang.org/std/macro.matches.html)
+- [Tài liệu thư viện chuẩn,](https://doc.rust-lang.org/std/option/enum.Option.html) `Option`
+- [Tài liệu thư viện chuẩn,](https://doc.rust-lang.org/std/result/enum.Result.html) `Result`
+- [Tài liệu thư viện chuẩn, macro](https://doc.rust-lang.org/std/macro.matches.html) `matches!`
 - [Tra cứu mã lỗi, E0004 (match không đầy đủ)](https://doc.rust-lang.org/error_codes/E0004.html)
 - [Tra cứu mã lỗi, E0382 (dùng giá trị đã bị move)](https://doc.rust-lang.org/error_codes/E0382.html)
