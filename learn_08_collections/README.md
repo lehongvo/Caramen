@@ -80,14 +80,14 @@ Với collection, biến chỉ giữ một "tay cầm" nhỏ (con trỏ, độ d
 
 ### 2.3 Ôn nhanh hai ý cần dùng
 
-- **`Option<T>`** là enum có hai dạng: `Some(giá_trị)` hoặc `None`. Nhiều phương thức của collection (`get`, `pop`, `first`...) trả về `Option` vì phần tử có thể không tồn tại. Cách xử lý thường dùng: `match` hoặc `unwrap_or` (xem bài [`enums_match`](../learn_07_enums_match/README.md)).
+- `Option<T>` là enum có hai dạng: `Some(giá_trị)` hoặc `None`. Nhiều phương thức của collection (`get`, `pop`, `first`...) trả về `Option` vì phần tử có thể không tồn tại. Cách xử lý thường dùng: `match` hoặc `unwrap_or` (xem bài [`enums_match`](../learn_07_enums_match/README.md)).
 - **Mượn (borrow):** `&x` để đọc, `&mut x` để sửa. Tại một thời điểm, hoặc có **nhiều** `&`, hoặc có **một** `&mut`, không có cả hai cùng lúc (xem bài [`ownership`](../learn_05_ownership/README.md)). Quy tắc này giải thích phần lớn lỗi bạn sẽ gặp với collection.
 
 ---
 
 ## 3. Vec
 
-`Vec<T>` (đọc là "vector") là danh sách co giãn các phần tử **cùng kiểu `T`**, nằm liền nhau trong bộ nhớ.
+`Vec<T>` (đọc là "vector") là danh sách co giãn các phần tử **cùng kiểu** `T`, nằm liền nhau trong bộ nhớ.
 
 ### 3.1 Tạo Vec
 
@@ -224,7 +224,7 @@ index out of bounds: the len is 3 but the index is 100
 
 Vài điểm cần nhớ:
 
-- **Chỉ số phải có kiểu `usize`.** Viết `v[i]` với `i: i32` bị lỗi `E0277` (`the type [{integer}] cannot be indexed by i32`). Dùng `v[i as usize]` khi cần.
+- **Chỉ số phải có kiểu** `usize`**.** Viết `v[i]` với `i: i32` bị lỗi `E0277` (`the type [{integer}] cannot be indexed by i32`). Dùng `v[i as usize]` khi cần.
 - `v.first()` và `v.last()` trả về `Option<&T>` cho phần tử đầu và cuối, an toàn cả khi Vec rỗng.
 - `v.get(i)` mượn phần tử (`&T`). Muốn lấy bản sao của số, dùng `.copied()` (xem [mục 5.3](#53-đọc-giá-trị)).
 
@@ -374,7 +374,7 @@ len = 11, capacity > 10: true
 | `push` / `pop` | Không có | Có |
 | Khi dùng | Số phần tử cố định, biết trước (tháng trong năm, toạ độ x y z) | Số phần tử chưa biết trước |
 
-**Slice** `&[T]` là một "lát nhìn" vào dãy phần tử liên tiếp, lấy được từ cả array lẫn Vec. Giống nguyên tắc `&str` cho tham số chuỗi, **hàm chỉ đọc dãy phần tử nên nhận `&[T]`**, như vậy truyền được cả hai:
+**Slice** `&[T]` là một "lát nhìn" vào dãy phần tử liên tiếp, lấy được từ cả array lẫn Vec. Giống nguyên tắc `&str` cho tham số chuỗi, **hàm chỉ đọc dãy phần tử nên nhận** `&[T]`, như vậy truyền được cả hai:
 
 ```rust
 fn sum(numbers: &[i32]) -> i32 {
@@ -611,7 +611,7 @@ error[E0277]: the type `str` cannot be indexed by `{integer}`
 
 Cách làm đúng: chọn rõ bạn cần gì (xem [mục 4.5](#45-cắt-chuỗi-theo-byte) và [mục 4.6](#46-duyệt-string)).
 
-**Một chữ nhìn thấy có thể gồm nhiều `char`.** Chữ có dấu có thể được lưu dạng *dựng sẵn* (một `char`) hoặc dạng *tổ hợp* (chữ cái cộng dấu tách rời). Hai dạng nhìn giống hệt nhau nhưng khác nhau với máy:
+**Một chữ nhìn thấy có thể gồm nhiều** `char`**.** Chữ có dấu có thể được lưu dạng *dựng sẵn* (một `char`) hoặc dạng *tổ hợp* (chữ cái cộng dấu tách rời). Hai dạng nhìn giống hệt nhau nhưng khác nhau với máy:
 
 ```rust
 fn main() {
@@ -1012,8 +1012,8 @@ Quên `.clone()` thì gặp lỗi `E0382` (xem [mục 8.2](#82-lỗi-biên-dịc
 
 Hai collection khác cũng nằm trong `std::collections`, đáng biết:
 
-- **`HashSet<T>`**: tập hợp các giá trị **không trùng nhau**. Giống `HashMap` nhưng chỉ có khoá. `insert` trả về `bool` cho biết giá trị có mới hay không.
-- **`BTreeMap<K, V>`**: giống `HashMap` nhưng luôn **sắp xếp theo khoá**, nên duyệt ra đúng thứ tự tăng dần.
+- `HashSet<T>`: tập hợp các giá trị **không trùng nhau**. Giống `HashMap` nhưng chỉ có khoá. `insert` trả về `bool` cho biết giá trị có mới hay không.
+- `BTreeMap<K, V>`: giống `HashMap` nhưng luôn **sắp xếp theo khoá**, nên duyệt ra đúng thứ tự tăng dần.
 
 ```rust
 use std::collections::{BTreeMap, HashSet};
@@ -1046,6 +1046,111 @@ false
 | Thứ tự duyệt | Không xác định | Theo thứ tự khoá |
 | Tốc độ tra cứu | Nhanh hơn (trung bình hằng số) | Chậm hơn một chút (tỉ lệ `log n`) |
 | Khi dùng | Mặc định | Cần thứ tự, hoặc cần lấy theo khoảng khoá |
+
+#### Bốn collection qua bốn ví dụ
+
+Có hai kiểu chia: **Set** (chỉ chứa giá trị, không trùng) với **Map** (cặp `khoá → giá trị`), và **Hash** (nhanh, không có thứ tự) với **BTree** (luôn sắp xếp).
+
+| | Không thứ tự (Hash) | Có thứ tự (BTree) |
+|---|---|---|
+| **Set**: chỉ giá trị | `HashSet` | `BTreeSet` |
+| **Map**: khoá → giá trị | `HashMap` | `BTreeMap` |
+
+**1. `HashSet`: loại trùng, hỏi "có chứa không?"**
+
+```rust
+use std::collections::HashSet;
+
+fn main() {
+    let mut set = HashSet::new();
+    set.insert("An");
+    set.insert("Bình");
+    set.insert("An"); // trùng, bị bỏ qua
+
+    println!("{}", set.len());
+    println!("{}", set.contains("An"));
+    println!("{}", set.contains("Chi"));
+}
+```
+
+**Kết quả:**
+
+```text
+2
+true
+false
+```
+
+**2. `BTreeSet`: như `HashSet` nhưng luôn sắp xếp**
+
+```rust
+use std::collections::BTreeSet;
+
+fn main() {
+    let mut set = BTreeSet::new();
+    set.insert(30);
+    set.insert(10);
+    set.insert(20);
+    set.insert(10); // trùng, bị bỏ qua
+
+    println!("{:?}", set);
+}
+```
+
+**Kết quả:**
+
+```text
+{10, 20, 30}
+```
+
+**3. `HashMap`: tra giá trị theo khoá (như danh bạ)**
+
+```rust
+use std::collections::HashMap;
+
+fn main() {
+    let mut phone = HashMap::new();
+    phone.insert("An", "0901");
+    phone.insert("Bình", "0902");
+
+    println!("{:?}", phone.get("An"));
+    println!("{:?}", phone.get("Chi"));
+}
+```
+
+**Kết quả:**
+
+```text
+Some("0901")
+None
+```
+
+**4. `BTreeMap`: như `HashMap` nhưng duyệt ra theo thứ tự khoá**
+
+```rust
+use std::collections::BTreeMap;
+
+fn main() {
+    let mut phone = BTreeMap::new();
+    phone.insert("Chi", "0903");
+    phone.insert("An", "0901");
+    phone.insert("Bình", "0902");
+
+    for (name, number) in &phone {
+        println!("{name}: {number}");
+    }
+}
+```
+
+**Kết quả:**
+
+```text
+An: 0901
+Bình: 0902
+Chi: 0903
+```
+
+Nhớ gọn: **Set** chỉ chứa giá trị, **Map** chứa cặp `khoá → giá trị`. **Hash** nhanh nhưng thứ tự lộn xộn, **BTree** luôn có thứ tự.
 
 ---
 
@@ -1332,7 +1437,7 @@ Khi phân vân, bắt đầu với `Vec` hoặc `HashMap`; hầu hết bài toá
 
 ### 7.5 Độ phức tạp của các thao tác
 
-Bảng dưới là mức độ **tăng thời gian khi số phần tử `n` lớn lên** (ký hiệu Big-O), để biết thao tác nào "rẻ", thao tác nào "đắt":
+Bảng dưới là mức độ **tăng thời gian khi số phần tử** `n` **lớn lên** (ký hiệu Big-O), để biết thao tác nào "rẻ", thao tác nào "đắt":
 
 | Thao tác | `Vec` | `HashMap` | `BTreeMap` |
 |---|---|---|---|
@@ -1395,7 +1500,7 @@ Các lỗi sau **biên dịch được** nhưng làm chương trình dừng khi 
 
 Một số lỗi đáng xem kỹ.
 
-**E0382 khi dùng lại Vec sau vòng `for`.** Vòng `for x in v` lấy sở hữu `v`:
+**E0382 khi dùng lại Vec sau vòng** `for`**.** Vòng `for x in v` lấy sở hữu `v`:
 
 ```rust
 fn main() {
@@ -1429,7 +1534,7 @@ help: consider iterating over a slice of the `Vec<String>`'s content to avoid mo
 
 Cách sửa là điều `help:` gợi ý: viết `for n in &names`.
 
-**E0507 khi lấy `String` ra khỏi Vec bằng chỉ số.**
+**E0507 khi lấy** `String` **ra khỏi Vec bằng chỉ số.**
 
 ```rust
 fn main() {
@@ -1460,7 +1565,7 @@ help: consider cloning the value if the performance cost is acceptable
 
 Compiler gợi ý hai cách: `&names[0]` (mượn) hoặc `names[0].clone()` (sao chép). Xem thêm [mục 7.3](#73-lấy-phần-tử-ra-khỏi-collection).
 
-**E0308 khi nối hai `String` bằng `+`.**
+**E0308 khi nối hai** `String` **bằng** `+`**.**
 
 ```rust
 fn main() {
@@ -1486,7 +1591,7 @@ help: consider borrowing here
   |                 +
 ```
 
-**E0599 khi gọi `push` trên array.** Lỗi này rất hay gặp lúc mới học, vì array và Vec trông giống nhau:
+**E0599 khi gọi** `push` **trên array.** Lỗi này rất hay gặp lúc mới học, vì array và Vec trông giống nhau:
 
 ```rust
 fn main() {
@@ -1507,7 +1612,7 @@ error[E0599]: no method named `push` found for array `[{integer}; 3]` in the cur
 
 Cách sửa: dùng `vec![0; 3]` (xem [mục 3.7](#37-vec-array-và-slice)).
 
-**E0369 khi cộng kết quả của `get`.**
+**E0369 khi cộng kết quả của** `get`**.**
 
 ```rust
 use std::collections::HashMap;
@@ -1578,8 +1683,7 @@ Hãy tự làm trước, chạy bằng `cargo run`, rồi mới mở phần đá
 
 **Gợi ý:** `push`, `insert`, `pop`, `sort`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn main() {
@@ -1601,7 +1705,7 @@ fn main() {
 
 `pop()` trả về `Option` nhưng ở đây ta không cần giá trị bị bỏ, nên có thể bỏ qua kết quả.
 
-</details>
+
 
 #### Bài 1.2. Truy cập an toàn
 
@@ -1616,8 +1720,7 @@ Không có màu thứ 5
 
 **Gợi ý:** `get` trả về `Option<&&str>`; dùng `match`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn main() {
@@ -1635,7 +1738,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 1.3. Byte và ký tự
 
@@ -1649,8 +1752,7 @@ Hà Nội: 9 byte, 6 ký tự
 
 **Gợi ý:** `len()` đếm byte; `chars().count()` đếm ký tự.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn main() {
@@ -1661,7 +1763,7 @@ fn main() {
 
 Giải thích: `à` chiếm 2 byte và `ộ` chiếm 3 byte, các ký tự còn lại 1 byte: `1 + 2 + 1 + 1 + 3 + 1 = 9` byte cho 6 ký tự.
 
-</details>
+
 
 ### Cấp độ 2. Vận dụng
 
@@ -1687,8 +1789,7 @@ fn main() {
 
 **Gợi ý:** đọc dòng `help:` trong thông báo lỗi.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn main() {
@@ -1702,7 +1803,7 @@ fn main() {
 
 Giải thích: `&scores` cho ra các tham chiếu **chỉ đọc**, không gán được qua `*s`. `&mut scores` cho ra tham chiếu sửa được.
 
-</details>
+
 
 #### Bài 2.2. Ghép họ và tên
 
@@ -1717,8 +1818,7 @@ Họ: Nguyễn, Tên: An
 
 **Gợi ý:** `a + &b` làm mất `a`. Có cách ghép mà không lấy đi biến nào.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn main() {
@@ -1733,7 +1833,7 @@ fn main() {
 
 `format!` chỉ mượn các biến, nên `first` và `last` vẫn dùng được.
 
-</details>
+
 
 #### Bài 2.3. Đảo ngược chuỗi
 
@@ -1747,8 +1847,7 @@ maN tệiV
 
 **Gợi ý:** `chars()`, `.rev()`, rồi `.collect()` vào `String`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn main() {
@@ -1760,7 +1859,7 @@ fn main() {
 
 Giải thích: đảo theo byte sẽ làm hỏng các chữ nhiều byte như `ệ`. `chars()` tách đúng từng ký tự nên đảo an toàn.
 
-</details>
+
 
 #### Bài 2.4. Đếm số lần xuất hiện
 
@@ -1776,8 +1875,7 @@ táo: 3
 
 **Gợi ý:** `entry(...).or_insert(0)`, rồi gom vào `Vec` và `sort()`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::collections::HashMap;
@@ -1798,7 +1896,7 @@ fn main() {
 }
 ```
 
-</details>
+
 
 #### Bài 2.5. Gom từ theo độ dài
 
@@ -1812,8 +1910,7 @@ fn main() {
 
 **Gợi ý:** khoá là `usize` (kết quả của `chars().count()`), giá trị là `Vec<&str>`; dùng `entry(...).or_default().push(...)`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::collections::BTreeMap;
@@ -1832,7 +1929,7 @@ fn main() {
 
 Giải thích: dùng `chars().count()` chứ không phải `len()`, vì `len()` đếm byte (`"là"` có 3 byte nhưng chỉ 2 ký tự). Trong mỗi nhóm, các từ giữ nguyên thứ tự xuất hiện.
 
-</details>
+
 
 ### Cấp độ 3. Thử thách
 
@@ -1849,8 +1946,7 @@ Số lần gặp lại giá trị đã có: 3
 
 **Gợi ý:** `insert` trả về `bool`: `true` nếu là giá trị mới, `false` nếu đã có.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::collections::HashSet;
@@ -1873,7 +1969,7 @@ fn main() {
 
 Giải thích: các giá trị khác nhau là `1, 2, 3, 4, 5, 6, 9` (7 giá trị). Các lần gặp lại là số `1` lần thứ hai, `5` lần thứ hai và `3` lần thứ hai (3 lần).
 
-</details>
+
 
 #### Bài 3.2. Bốn đoạn mã, bốn lỗi
 
@@ -1922,8 +2018,7 @@ fn main() {
 }
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 | Đoạn | Lỗi | Nguyên nhân | Cách sửa |
 |---|---|---|---|
@@ -1932,7 +2027,7 @@ fn main() {
 | (c) | `E0433` cannot find type `HashMap` | Chưa `use` | Thêm `use std::collections::HashMap;` ở đầu tệp |
 | (d) | `E0382` borrow of moved value | `for n in names` đã lấy sở hữu `names` | `for n in &names` |
 
-</details>
+
 
 #### Bài 3.3. Danh bạ điện thoại
 
@@ -1948,8 +2043,7 @@ Bình: 0902
 
 **Gợi ý:** `insert` cùng khoá sẽ ghi đè; `remove` trả về `Option`; sắp xếp khoá trước khi in.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::collections::HashMap;
@@ -1975,7 +2069,7 @@ fn main() {
 
 Giải thích: `insert` lần hai với khoá `"An"` ghi đè số cũ. `remove("Chi")` nhận `&str` và trả về `Some("0903")`. Danh bạ còn hai người, in theo thứ tự chữ cái của tên.
 
-</details>
+
 
 ---
 
@@ -2008,8 +2102,8 @@ Giải thích: `insert` lần hai với khoá `"An"` ghi đè số cũ. `remove(
 - [Rust By Example, Vectors](https://doc.rust-lang.org/rust-by-example/std/vec.html)
 - [Rust By Example, Strings](https://doc.rust-lang.org/rust-by-example/std/str.html)
 - [Rust By Example, HashMap](https://doc.rust-lang.org/rust-by-example/std/hash.html)
-- [Tài liệu thư viện chuẩn, `Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html)
-- [Tài liệu thư viện chuẩn, `String`](https://doc.rust-lang.org/std/string/struct.String.html)
-- [Tài liệu thư viện chuẩn, `HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
-- [Tài liệu thư viện chuẩn, `std::collections` (so sánh và chọn collection)](https://doc.rust-lang.org/std/collections/index.html)
+- [Tài liệu thư viện chuẩn,](https://doc.rust-lang.org/std/vec/struct.Vec.html) `Vec`
+- [Tài liệu thư viện chuẩn,](https://doc.rust-lang.org/std/string/struct.String.html) `String`
+- [Tài liệu thư viện chuẩn,](https://doc.rust-lang.org/std/collections/struct.HashMap.html) `HashMap`
+- [Tài liệu thư viện chuẩn,](https://doc.rust-lang.org/std/collections/index.html) `std::collections` [(so sánh và chọn collection)](https://doc.rust-lang.org/std/collections/index.html)
 - [Tra cứu mã lỗi, ví dụ E0502](https://doc.rust-lang.org/error_codes/E0502.html)
