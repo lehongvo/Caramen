@@ -7,7 +7,9 @@ fn main() {
     // check_work();
     // check_struct_ref();
     // check_lifetime_impl();
-    check_lifetime_static();
+    // check_lifetime_static();
+    // ex2();
+    ex3();
 }
 
 fn largest_i32(list: &[i32]) -> &i32 {
@@ -209,4 +211,152 @@ pub fn check_lifetime_static() {
     println!("{}", language());
 }
 
-pub fn ex1() {}
+pub fn ex1() {
+    fn largest<T: PartialOrd>(list: &[T]) -> &T {
+        let mut largest = &list[0];
+        for item in list {
+            if item > largest {
+                largest = item;
+            }
+        }
+        largest
+    }
+    #[derive(Debug, PartialEq, PartialOrd)]
+    struct Version {
+        major: u32,
+        minor: u32,
+    }
+
+    let numbers = [34, 50, 25, 100, 65];
+    let temperatures = [36.6, 39.2, 37.0];
+    let letters = ['y', 'm', 'a', 'q'];
+    let versions = [
+        Version { major: 1, minor: 9 },
+        Version { major: 2, minor: 0 },
+        Version {
+            major: 1,
+            minor: 12,
+        },
+    ];
+
+    println!("Số lớn nhất: {}", largest(&numbers));
+    println!("Nhiệt độ cao nhất: {}", largest(&temperatures));
+    println!("Ký tự lớn nhất: {}", largest(&letters));
+
+    let newest = largest(&versions);
+    println!("Phiên bản mới nhất: {}.{}", newest.major, newest.minor);
+}
+
+fn ex2() {
+    use std::f64::consts::PI;
+
+    trait Shape {
+        fn name(&self) -> String;
+        fn area(&self) -> f64;
+
+        // Phương thức có sẵn: dùng lại name() và area() của từng hình
+        fn describe(&self) -> String {
+            format!("{} có diện tích {:.2}", self.name(), self.area())
+        }
+    }
+
+    struct Circle {
+        radius: f64,
+    }
+    struct Rectangle {
+        width: f64,
+        height: f64,
+    }
+    struct Triangle {
+        base: f64,
+        height: f64,
+    }
+    impl Shape for Circle {
+        fn name(&self) -> String {
+            String::from("Hình tròn")
+        }
+        fn area(&self) -> f64 {
+            PI * self.radius * self.radius
+        }
+    }
+
+    impl Shape for Rectangle {
+        fn name(&self) -> String {
+            String::from("Hình chữ nhật")
+        }
+        fn area(&self) -> f64 {
+            self.width * self.height
+        }
+    }
+
+    impl Shape for Triangle {
+        fn name(&self) -> String {
+            String::from("Tam giác")
+        }
+        fn area(&self) -> f64 {
+            0.5 * self.base * self.height
+        }
+    }
+
+    fn print_info<T: Shape>(shape: &T) {
+        println!("{}", shape.describe());
+    }
+
+    // Bước 1
+    print_info(&Circle { radius: 2.0 });
+    print_info(&Rectangle {
+        width: 3.0,
+        height: 4.5,
+    });
+
+    // Bước 2: một danh sách chứa nhiều kiểu hình khác nhau (gọi động)
+    let shapes: Vec<Box<dyn Shape>> = vec![
+        Box::new(Circle { radius: 2.0 }),
+        Box::new(Rectangle {
+            width: 3.0,
+            height: 4.5,
+        }),
+        Box::new(Triangle {
+            base: 6.0,
+            height: 2.5,
+        }),
+    ];
+
+    let mut total = 0.0;
+    for shape in &shapes {
+        total += shape.area();
+    }
+    println!("Tổng diện tích {} hình: {:.2}", shapes.len(), total);
+}
+
+pub fn ex3() {
+    struct TextStats<'a> {
+        text: &'a str,
+    }
+
+    impl<'a> TextStats<'a> {
+        fn new(text: &'a str) -> Self {
+            TextStats { text }
+        }
+
+        fn word_count(&self) -> usize {
+            self.text.split_whitespace().count()
+        }
+
+        fn longest_word(&self) -> &'a str {
+            let mut longest = self.text.split(' ').next().unwrap();
+            for word in self.text.split_whitespace() {
+                if word.len() <= longest.len() {
+                    longest = word;
+                }
+            }
+            longest
+        }
+    }
+
+    let text = String::from("ownership makes Rust safe and fast");
+    let stats = TextStats::new(&text);
+
+    println!("Số từ: {}", stats.word_count());
+    println!("Từ dài nhất: {}", stats.longest_word());
+}
