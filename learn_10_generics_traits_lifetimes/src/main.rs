@@ -3,7 +3,11 @@ fn main() {
     // check_loop_code_t();
     // check_generic_struct();
     // check_type_name();
-    check_life_time();
+    // check_life_time();
+    // check_work();
+    // check_struct_ref();
+    // check_lifetime_impl();
+    check_lifetime_static();
 }
 
 fn largest_i32(list: &[i32]) -> &i32 {
@@ -144,3 +148,65 @@ fn check_life_time() {
 
     println!("{}", greeting());
 }
+
+fn first_word(s: &str) -> &str {
+    match s.find(' ') {
+        Some(value) => &s[..value],
+        None => s,
+    }
+}
+
+fn check_work() {
+    let sentence = String::from("hello wide world");
+    println!("{}", first_word(&sentence));
+}
+
+fn check_struct_ref() {
+    struct Excerpt<'a> {
+        part: &'a str,
+    }
+
+    let novel = String::from("Gọi tôi là Ishmael. Nhiều năm trước...");
+    let first_sentence = novel.split(".").next().unwrap();
+    let excerpt = Excerpt {
+        part: first_sentence,
+    };
+    println!("{}", excerpt.part);
+}
+
+fn check_lifetime_impl() {
+    struct Excerpt<'a> {
+        part: &'a str,
+    }
+
+    impl<'a> Excerpt<'a> {
+        fn level(&self) -> i32 {
+            3
+        }
+
+        fn announce_and_return(&self, announcement: &str) -> &str {
+            println!("Chú ý! {announcement}");
+            self.part
+        }
+    }
+
+    let text = String::from("Một. Hai. Ba.");
+    let excerpt = Excerpt {
+        part: text.as_str(),
+    };
+
+    println!("level = {}", excerpt.level());
+    println!("{}", excerpt.announce_and_return("sắp in"));
+}
+
+pub fn check_lifetime_static() {
+    fn language() -> &'static str {
+        "Rust"
+    }
+
+    let s: &'static str = "Chuỗi này sống suốt chương trình";
+    println!("{s}");
+    println!("{}", language());
+}
+
+pub fn ex1() {}
