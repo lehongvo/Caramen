@@ -90,7 +90,10 @@ mod tests {
 
     #[test]
     fn example_interleaved() {
-        assert_eq!(merged(vec![1, 2, 3, 0, 0, 0], 3, vec![2, 5, 6], 3), vec![1, 2, 2, 3, 5, 6]);
+        assert_eq!(
+            merged(vec![1, 2, 3, 0, 0, 0], 3, vec![2, 5, 6], 3),
+            vec![1, 2, 2, 3, 5, 6]
+        );
     }
 
     #[test]
@@ -105,7 +108,10 @@ mod tests {
 
     #[test]
     fn all_of_nums2_is_smaller() {
-        assert_eq!(merged(vec![4, 5, 0, 0], 2, vec![-3, -1], 2), vec![-3, -1, 4, 5]);
+        assert_eq!(
+            merged(vec![4, 5, 0, 0], 2, vec![-3, -1], 2),
+            vec![-3, -1, 4, 5]
+        );
     }
 
     #[test]
@@ -113,6 +119,9 @@ mod tests {
         let mut nums1: Vec<i32> = (0..100).map(|i| i * 2).collect();
         nums1.extend(std::iter::repeat_n(0, 100));
         let nums2: Vec<i32> = (0..100).map(|i| i * 2 + 1).collect();
-        assert_eq!(merged(nums1, 100, nums2, 100), (0..200).collect::<Vec<i32>>());
+        assert_eq!(
+            merged(nums1, 100, nums2, 100),
+            (0..200).collect::<Vec<i32>>()
+        );
     }
 }

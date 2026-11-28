@@ -86,7 +86,10 @@ mod tests {
 
     #[test]
     fn unicode_words() {
-        assert_eq!(join_words(s("über"), s("straße"), s("日本")), "über straße 日本");
+        assert_eq!(
+            join_words(s("über"), s("straße"), s("日本")),
+            "über straße 日本"
+        );
     }
 
     #[test]

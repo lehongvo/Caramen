@@ -99,7 +99,10 @@ mod tests {
 
     #[test]
     fn inner_spaces_are_kept() {
-        assert_eq!(parse_pair("  full name\t=  Ada  Lovelace "), Some(("full name", "Ada  Lovelace")));
+        assert_eq!(
+            parse_pair("  full name\t=  Ada  Lovelace "),
+            Some(("full name", "Ada  Lovelace"))
+        );
     }
 
     #[test]

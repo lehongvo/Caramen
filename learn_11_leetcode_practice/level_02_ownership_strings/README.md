@@ -2,7 +2,64 @@
 
 > Focus: ownership, moves, borrowing, slices, `String` vs `&str`, chars and bytes.
 
-<!-- WRITE_THIS_SECTION: an introduction to this level (2-4 sentences), a "Prerequisites" section, a "What you will practice" section (bullet list with links to The Rust Book / std docs), and a "Roadmap" section (groups of problems by number range). Delete this line when done. -->
+This level covers chapter 4 (ownership) and section 8.2 (strings) of The Rust Book: who owns a
+value, when it moves, how to borrow it, and how to work with UTF-8 text through `String` and `&str`.
+You modify vectors and strings in place through `&mut`, return slices that borrow from your inputs,
+and fix 11 small programs that the borrow checker rejects. 55 problems come from LeetCode (43 Easy
+and 12 Medium, using LeetCode's exact Rust signatures) and focus on strings and in-place arrays; the
+other 45 are original problems, each built around one ownership or string feature.
+
+## Prerequisites
+
+- Level 1, or the same knowledge: functions, `if`/`match`, loops, `Vec` and basic slices.
+- Read [The Rust Book 4.1-4.3](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+  and [8.2](https://doc.rust-lang.org/book/ch08-02-strings.html) before or alongside this level.
+- `Option` appears in some signatures (`Some(x)` / `None`); a basic `match` on it is all you need.
+
+## What you will practice
+
+- Moves, ownership transfer into and out of functions, `Clone` vs `Copy`:
+  [Book 4.1](https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html),
+  [`Clone`](https://doc.rust-lang.org/std/clone/trait.Clone.html),
+  [`Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html).
+- Shared and mutable references, the borrowing rules, and dangling references:
+  [Book 4.2](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html).
+- Moving out of a `&mut` with [`std::mem::take`](https://doc.rust-lang.org/std/mem/fn.take.html) and
+  [`std::mem::swap`](https://doc.rust-lang.org/std/mem/fn.swap.html).
+- Slices `&[T]` and `&mut [T]`: ranges, `windows`, `chunks_mut`, `split_at_mut`, `swap`, `reverse`,
+  and functions that return sub-slices of their input:
+  [Book 4.3](https://doc.rust-lang.org/book/ch04-03-slices.html),
+  [slice methods](https://doc.rust-lang.org/std/primitive.slice.html).
+- In-place algorithms on `&mut Vec<T>`: read/write indices, two pointers, filling from the back,
+  three-reversal rotation.
+- `String` vs `&str`, building strings with `push`, `push_str`, `+`, `format!`, `join` and `repeat`:
+  [Book 8.2](https://doc.rust-lang.org/book/ch08-02-strings.html),
+  [`String`](https://doc.rust-lang.org/std/string/struct.String.html),
+  [`std::fmt`](https://doc.rust-lang.org/std/fmt/index.html).
+- `chars()`, `bytes()`, `char_indices()`, `as_bytes()`, byte offsets vs character positions,
+  `is_char_boundary`, and why `s[0]` does not compile:
+  [`str` methods](https://doc.rust-lang.org/std/primitive.str.html),
+  [`char` methods](https://doc.rust-lang.org/std/primitive.char.html).
+- Case conversion (ASCII and full Unicode), `trim`, `split_whitespace`, `split_once`, `strip_prefix`.
+- Choosing `&str` or `String` for parameters and return values.
+- Reading compiler errors E0382, E0106, E0594, E0507, E0502, E0499, E0308, E0277 and E0515, and
+  fixing them: [error code index](https://doc.rust-lang.org/error_codes/E0382.html).
+
+## Roadmap
+
+| Problems | Theme |
+| -------- | ----- |
+| 0101-0106 | Ownership: moves, `Clone` vs `Copy`, moving out of a `Vec`, `mem::take`, `mem::swap`, `&mut` |
+| 0107-0111 | Fix the borrow checker, part 1: use after move, dangling references, writing through `&` |
+| 0112-0119 | Slices `&[T]`: windows, checked ranges, returning sub-slices, owned `mut` vectors |
+| 0120-0131 | In place through `&mut Vec<T>` / `&mut [T]`: swaps, write indices, merging, `split_at_mut`, two more fixes |
+| 0132-0137 | `&str` vs `String`: bytes vs chars, the first word, deref coercion, ASCII bytes |
+| 0138-0146 | Building strings: `format!`, `+`, `push_str`, `join`, slice patterns, run-length decoding |
+| 0147-0156 | `chars`, `char_indices`, UTF-8 boundaries, Unicode case conversion |
+| 0157-0171 | Words: `split_whitespace`, `trim`, `lines`, `split_once`, returning `&str`, choosing signatures |
+| 0172-0183 | Two indices on strings, prefixes and searching |
+| 0184-0188 | Strings as stacks and digit-by-digit arithmetic |
+| 0189-0200 | Medium challenges: rotation, Dutch flag, next permutation, compression, atoi, zigzag, multiplication, palindromes |
 
 ## How to work on a problem
 
@@ -118,5 +175,14 @@ Problems whose source is **LC** use LeetCode's exact Rust signature, so you can 
 | 0189 | [Rotate Array](exercises/p0189_rotate_array.md) | Medium | in-place rotation with three `reverse` calls on sub-slices, `k % n`, `rotate_right` | [LC 189](https://leetcode.com/problems/rotate-array/) |
 | 0190 | [Sort Colors](exercises/p0190_sort_colors.md) | Medium | three indices on one `&mut Vec<i32>` (Dutch national flag), `swap`, `match` on values | [LC 75](https://leetcode.com/problems/sort-colors/) |
 | 0191 | [Remove Duplicates from Sorted Array II](exercises/p0191_remove_duplicates_from_sorted_array_ii.md) | Medium | in-place compaction with a write index, comparing with `nums[write - 2]` | [LC 80](https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/) |
+| 0192 | [Next Permutation](exercises/p0192_next_permutation.md) | Medium | in-place `swap` + `reverse` of a sub-slice, searching from the back with `rev().find` | [LC 31](https://leetcode.com/problems/next-permutation/) |
+| 0193 | [String Compression](exercises/p0193_string_compression.md) | Medium | in-place rewrite of a `&mut Vec<char>` with read/write indices, `to_string().chars()`, `truncate` | [LC 443](https://leetcode.com/problems/string-compression/) |
+| 0194 | [Reverse Words in a String](exercises/p0194_reverse_words_in_a_string.md) | Medium | in-place word reversal on the string's own bytes, compacting spaces, `split_whitespace().rev()` | [LC 151](https://leetcode.com/problems/reverse-words-in-a-string/) |
+| 0195 | [Compare Version Numbers](exercises/p0195_compare_version_numbers.md) | Medium | two `split('.')` iterators, `str::parse`, `Ordering`, treating a missing part as `0` | [LC 165](https://leetcode.com/problems/compare-version-numbers/) |
+| 0196 | [String to Integer (atoi)](exercises/p0196_string_to_integer_atoi.md) | Medium | `trim_start_matches`, matching on `as_bytes().first()`, `take_while`, overflow handling, `clamp` | [LC 8](https://leetcode.com/problems/string-to-integer-atoi/) |
+| 0197 | [Count and Say](exercises/p0197_count_and_say.md) | Medium | building a new `String` from the previous one, `slice::chunk_by`, replacing an owned value in a loop | [LC 38](https://leetcode.com/problems/count-and-say/) |
+| 0198 | [Zigzag Conversion](exercises/p0198_zigzag_conversion.md) | Medium | a `Vec<String>` of rows, `vec![String::new(); n]`, direction flag, `concat` | [LC 6](https://leetcode.com/problems/zigzag-conversion/) |
+| 0199 | [Multiply Strings](exercises/p0199_multiply_strings.md) | Medium | digit vectors, schoolbook multiplication, `enumerate().rev()`, `char::from_digit` | [LC 43](https://leetcode.com/problems/multiply-strings/) |
+| 0200 | [Longest Palindromic Substring](exercises/p0200_longest_palindromic_substring.md) | Medium | expanding around centers with byte indices, a helper taking `&[u8]`, slicing the answer out of the input | [LC 5](https://leetcode.com/problems/longest-palindromic-substring/) |
 
 <!-- PROBLEM_TABLE:END -->

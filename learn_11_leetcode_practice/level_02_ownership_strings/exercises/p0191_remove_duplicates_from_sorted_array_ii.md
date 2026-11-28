@@ -81,7 +81,10 @@ mod tests {
 
     #[test]
     fn example_long() {
-        assert_eq!(run(vec![0, 0, 1, 1, 1, 1, 2, 3, 3]), vec![0, 0, 1, 1, 2, 3, 3]);
+        assert_eq!(
+            run(vec![0, 0, 1, 1, 1, 1, 2, 3, 3]),
+            vec![0, 0, 1, 1, 2, 3, 3]
+        );
     }
 
     #[test]

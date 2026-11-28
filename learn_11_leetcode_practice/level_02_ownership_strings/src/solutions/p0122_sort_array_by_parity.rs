@@ -74,7 +74,10 @@ mod tests {
     fn assert_valid(input: Vec<i32>) {
         let mut expected = input.clone();
         let result = Solution::sort_array_by_parity(input);
-        let first_odd = result.iter().position(|x| x % 2 == 1).unwrap_or(result.len());
+        let first_odd = result
+            .iter()
+            .position(|x| x % 2 == 1)
+            .unwrap_or(result.len());
         assert!(result[first_odd..].iter().all(|x| x % 2 == 1), "{result:?}");
         let mut sorted = result;
         sorted.sort();

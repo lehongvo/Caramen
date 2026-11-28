@@ -1,0 +1,101 @@
+// ==================================================================
+// PRACTICE 0696: replace every `todo!(...)` with your code; keep the tests unchanged.
+// Full problem statement: exercises/p0696_flatten_binary_tree_to_linked_list.md
+// Run the tests:          cargo test practice::p0696
+// ==================================================================
+
+//! # Problem 0696: Flatten Binary Tree to Linked List
+//!
+//! - **Difficulty:** Medium
+//! - **Topics:** `&mut Option<Rc<RefCell<TreeNode>>>` parameter, collecting `Rc` handles in pre-order, re-linking with `borrow_mut`, `windows(2)`
+//! - **Source:** [LeetCode 114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)
+//!
+//! ## Problem
+//!
+//! Flatten a binary tree **in place** into a "linked list" made of the same `TreeNode`s: every
+//! node's `left` becomes `None`, and its `right` points to the next node in **pre-order**
+//! (node, left subtree, right subtree). The root stays the first node.
+//!
+//! Implement `Solution::flatten(root: &mut Option<Rc<RefCell<TreeNode>>>)`. It returns nothing;
+//! the tree behind `root` is rearranged.
+//!
+//! ## Examples
+//!
+//! ```text
+//! Input:  root = [1, 2, 5, 3, 4, null, 6]
+//! After:  root = [1, null, 2, null, 3, null, 4, null, 5, null, 6]
+//!
+//! Input:  root = []
+//! After:  root = []
+//!
+//! Input:  root = [0]
+//! After:  root = [0]
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `0 <= n <= 2000`, `-100 <= val <= 100`
+//!
+//! ## Hints
+//!
+//! 1. First collect handles (`Rc::clone`) to all nodes in pre-order, using a stack: push the right
+//!    child before the left one.
+//! 2. Then walk the collected handles in pairs (`nodes.windows(2)`): set `left = None` and
+//!    `right = Some(next)` on the first of each pair. Do not forget the last node.
+//! 3. Follow-up: there is an `O(1)` extra space version (for each node, splice its left subtree in
+//!    front of its right subtree).
+
+use crate::common::TreeNode;
+use std::cell::RefCell;
+use std::rc::Rc;
+
+pub struct Solution;
+
+impl Solution {
+    pub fn flatten(root: &mut Option<Rc<RefCell<TreeNode>>>) {
+        todo!("Write your solution here")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::common::{parse_tree, tree_to_string};
+
+    fn flattened(text: &str) -> String {
+        let mut root = parse_tree(text);
+        Solution::flatten(&mut root);
+        tree_to_string(&root)
+    }
+
+    #[test]
+    fn example_one() {
+        assert_eq!(
+            flattened("[1,2,5,3,4,null,6]"),
+            "[1,null,2,null,3,null,4,null,5,null,6]"
+        );
+    }
+
+    #[test]
+    fn empty_and_single() {
+        assert_eq!(flattened("[]"), "[]");
+        assert_eq!(flattened("[0]"), "[0]");
+    }
+
+    #[test]
+    fn left_chain_becomes_right_chain() {
+        assert_eq!(flattened("[1,2,null,3]"), "[1,null,2,null,3]");
+        assert_eq!(flattened("[1,null,2,null,3]"), "[1,null,2,null,3]");
+    }
+
+    #[test]
+    fn same_nodes_are_reused() {
+        let mut root = parse_tree("[1,2,3]");
+        let three = root.as_ref().unwrap().borrow().right.clone().unwrap();
+        Solution::flatten(&mut root);
+        let two = root.as_ref().unwrap().borrow().right.clone().unwrap();
+        let after = two.borrow().right.clone().unwrap();
+        assert!(Rc::ptr_eq(&after, &three));
+        assert_eq!(tree_to_string(&root), "[1,null,2,null,3]");
+    }
+}

@@ -144,7 +144,8 @@ def check_file(path: Path, expected: int, index: dict[int, dict], rep: Report) -
                     rep.err(f"{name}: LeetCode {lc_num} has no Rust template; write 'Adapted from [LeetCode ...]'")
                 if not adapted and diff and row["difficulty"] != diff.group(1):
                     rep.err(f"{name}: LeetCode {lc_num} is '{row['difficulty']}', file says '{diff.group(1)}'")
-                if not adapted and "impl Solution" not in text:
+                # LeetCode "design" problems use their own struct with `fn new(...)` instead of `impl Solution`.
+                if not adapted and "impl Solution" not in text and not re.search(r"\bfn new\(", text):
                     rep.warn(f"{name}: a direct LeetCode problem should use `impl Solution` with LeetCode's exact Rust signature")
 
     for section in REQUIRED_SECTIONS:

@@ -80,12 +80,18 @@ mod tests {
 
     #[test]
     fn example_identity() {
-        assert_eq!(Solution::restore_string("abc".to_string(), vec![0, 1, 2]), "abc");
+        assert_eq!(
+            Solution::restore_string("abc".to_string(), vec![0, 1, 2]),
+            "abc"
+        );
     }
 
     #[test]
     fn reversed_permutation() {
-        assert_eq!(Solution::restore_string("abcd".to_string(), vec![3, 2, 1, 0]), "dcba");
+        assert_eq!(
+            Solution::restore_string("abcd".to_string(), vec![3, 2, 1, 0]),
+            "dcba"
+        );
     }
 
     #[test]

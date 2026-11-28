@@ -94,7 +94,9 @@ mod tests {
 
     #[test]
     fn large_input() {
-        let text: String = (0..100_000).map(|i| (b'a' + (i % 26) as u8) as char).collect();
+        let text: String = (0..100_000)
+            .map(|i| (b'a' + (i % 26) as u8) as char)
+            .collect();
         let expected: String = text.chars().rev().collect();
         assert_eq!(reversed(&text), expected);
     }

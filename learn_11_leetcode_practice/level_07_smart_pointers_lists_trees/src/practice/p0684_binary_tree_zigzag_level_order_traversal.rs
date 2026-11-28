@@ -1,0 +1,91 @@
+// ==================================================================
+// PRACTICE 0684: replace every `todo!(...)` with your code; keep the tests unchanged.
+// Full problem statement: exercises/p0684_binary_tree_zigzag_level_order_traversal.md
+// Run the tests:          cargo test practice::p0684
+// ==================================================================
+
+//! # Problem 0684: Binary Tree Zigzag Level Order Traversal
+//!
+//! - **Difficulty:** Medium
+//! - **Topics:** level-by-level BFS, reversing every other row, a flipping `bool`
+//! - **Source:** [LeetCode 103. Binary Tree Zigzag Level Order Traversal](https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/)
+//!
+//! ## Problem
+//!
+//! Return the values of a binary tree level by level, alternating the direction: the first level
+//! left to right, the second right to left, the third left to right again, and so on.
+//!
+//! Implement `Solution::zigzag_level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>>`.
+//!
+//! ## Examples
+//!
+//! ```text
+//! Input:  root = [3, 9, 20, null, null, 15, 7]
+//! Output: [[3], [20, 9], [15, 7]]
+//!
+//! Input:  root = [1]
+//! Output: [[1]]
+//!
+//! Input:  root = []
+//! Output: []
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `0 <= n <= 2000`, `-100 <= val <= 100`
+//!
+//! ## Hints
+//!
+//! 1. Collect the levels exactly as in problem 0682.
+//! 2. Before storing a row, reverse it when the level index is odd. Changing the order in which
+//!    children are visited is not needed.
+
+use crate::common::TreeNode;
+use std::cell::RefCell;
+use std::rc::Rc;
+
+pub struct Solution;
+
+impl Solution {
+    pub fn zigzag_level_order(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<Vec<i32>> {
+        todo!("Write your solution here")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::common::{parse_tree, tree};
+
+    #[test]
+    fn example_one() {
+        let root = parse_tree("[3,9,20,null,null,15,7]");
+        assert_eq!(
+            Solution::zigzag_level_order(root),
+            vec![vec![3], vec![20, 9], vec![15, 7]]
+        );
+    }
+
+    #[test]
+    fn single_and_empty() {
+        assert_eq!(
+            Solution::zigzag_level_order(parse_tree("[1]")),
+            vec![vec![1]]
+        );
+        assert!(Solution::zigzag_level_order(None).is_empty());
+    }
+
+    #[test]
+    fn four_levels() {
+        let values: Vec<Option<i32>> = (1..=15).map(Some).collect();
+        assert_eq!(
+            Solution::zigzag_level_order(tree(&values)),
+            vec![
+                vec![1],
+                vec![3, 2],
+                vec![4, 5, 6, 7],
+                vec![15, 14, 13, 12, 11, 10, 9, 8]
+            ]
+        );
+    }
+}

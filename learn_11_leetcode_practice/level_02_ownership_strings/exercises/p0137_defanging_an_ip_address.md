@@ -63,7 +63,10 @@ mod tests {
 
     #[test]
     fn example_ones() {
-        assert_eq!(Solution::defang_i_paddr("1.1.1.1".to_string()), "1[.]1[.]1[.]1");
+        assert_eq!(
+            Solution::defang_i_paddr("1.1.1.1".to_string()),
+            "1[.]1[.]1[.]1"
+        );
     }
 
     #[test]
@@ -76,7 +79,10 @@ mod tests {
 
     #[test]
     fn zeros_address() {
-        assert_eq!(Solution::defang_i_paddr("0.0.0.0".to_string()), "0[.]0[.]0[.]0");
+        assert_eq!(
+            Solution::defang_i_paddr("0.0.0.0".to_string()),
+            "0[.]0[.]0[.]0"
+        );
     }
 
     #[test]

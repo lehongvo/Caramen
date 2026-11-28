@@ -112,7 +112,9 @@ mod tests {
     #[test]
     fn largest_input() {
         let base = "q".repeat(150);
-        let strs: Vec<String> = (0..200).map(|i| format!("{base}{}", "z".repeat(i % 50))).collect();
+        let strs: Vec<String> = (0..200)
+            .map(|i| format!("{base}{}", "z".repeat(i % 50)))
+            .collect();
         assert_eq!(Solution::longest_common_prefix(strs), base);
     }
 }

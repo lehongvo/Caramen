@@ -71,12 +71,18 @@ mod tests {
 
     #[test]
     fn example_apple() {
-        assert_eq!(receipt_line("apple", 3, 50), "apple       3 x $0.50 = $1.50");
+        assert_eq!(
+            receipt_line("apple", 3, 50),
+            "apple       3 x $0.50 = $1.50"
+        );
     }
 
     #[test]
     fn example_exact_width_name() {
-        assert_eq!(receipt_line("watermelon", 12, 405), "watermelon 12 x $4.05 = $48.60");
+        assert_eq!(
+            receipt_line("watermelon", 12, 405),
+            "watermelon 12 x $4.05 = $48.60"
+        );
     }
 
     #[test]

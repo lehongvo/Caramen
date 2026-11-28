@@ -82,7 +82,10 @@ mod tests {
 
     #[test]
     fn example_mixed() {
-        assert_eq!(Solution::apply_operations(vec![1, 2, 2, 1, 1, 0]), vec![1, 4, 2, 0, 0, 0]);
+        assert_eq!(
+            Solution::apply_operations(vec![1, 2, 2, 1, 1, 0]),
+            vec![1, 4, 2, 0, 0, 0]
+        );
     }
 
     #[test]
@@ -93,7 +96,10 @@ mod tests {
     #[test]
     fn chain_of_equal_values_is_processed_in_order() {
         // [2,2,2,2] -> i=0: [4,0,2,2] -> i=2: [4,0,4,0]
-        assert_eq!(Solution::apply_operations(vec![2, 2, 2, 2]), vec![4, 4, 0, 0]);
+        assert_eq!(
+            Solution::apply_operations(vec![2, 2, 2, 2]),
+            vec![4, 4, 0, 0]
+        );
         // [3,3,3] -> i=0: [6,0,3] -> nothing else
         assert_eq!(Solution::apply_operations(vec![3, 3, 3]), vec![6, 3, 0]);
     }

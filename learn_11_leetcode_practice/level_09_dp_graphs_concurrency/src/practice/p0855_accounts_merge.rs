@@ -1,0 +1,140 @@
+// ==================================================================
+// PRACTICE 0855: replace every `todo!(...)` with your code; keep the tests unchanged.
+// Full problem statement: exercises/p0855_accounts_merge.md
+// Run the tests:          cargo test practice::p0855
+// ==================================================================
+
+//! # Problem 0855: Accounts Merge
+//!
+//! - **Difficulty:** Medium
+//! - **Topics:** union-find keyed by strings via `HashMap<&str, usize>`, grouping into
+//!   `BTreeSet`s, building `Vec<Vec<String>>`
+//! - **Source:** [LeetCode 721. Accounts Merge](https://leetcode.com/problems/accounts-merge/)
+//!
+//! ## Problem
+//!
+//! Each entry of `accounts` is a list whose first element is a person's name and whose other
+//! elements are email addresses. Two accounts belong to the same person if they share **at least
+//! one** email (directly or through a chain of accounts). People with the same name are not
+//! necessarily the same person; all accounts of one person do have the same name.
+//!
+//! Merge the accounts of each person. Return one list per person: the name followed by all of that
+//! person's emails **sorted** (byte order), without duplicates. The lists may be returned in any
+//! order.
+//!
+//! Implement `Solution::accounts_merge(accounts: Vec<Vec<String>>) -> Vec<Vec<String>>`.
+//!
+//! ## Examples
+//!
+//! ```text
+//! Input:  accounts = [["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+//!                     ["John", "johnsmith@mail.com", "john00@mail.com"],
+//!                     ["Mary", "mary@mail.com"],
+//!                     ["John", "johnnybravo@mail.com"]]
+//! Output: [["John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"],
+//!          ["Mary", "mary@mail.com"],
+//!          ["John", "johnnybravo@mail.com"]]
+//! Explanation: the first two accounts share "johnsmith@mail.com". The last John is a different
+//! person.
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `1 <= accounts.len() <= 1000`, `2 <= accounts[i].len() <= 10`
+//! - Names and emails have 1 to 30 characters; names are English letters.
+//!
+//! ## Hints
+//!
+//! 1. Union **accounts**, not emails: give each account an index, and remember for each email the
+//!    first account that contained it. Seeing the email again means "union these two accounts".
+//! 2. Afterwards, collect each account's emails into a sorted set owned by its root account.
+
+use std::collections::{BTreeMap, BTreeSet, HashMap};
+
+pub struct Solution;
+
+impl Solution {
+    pub fn accounts_merge(accounts: Vec<Vec<String>>) -> Vec<Vec<String>> {
+        todo!("Write your solution here")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn to_input(rows: &[&[&str]]) -> Vec<Vec<String>> {
+        rows.iter()
+            .map(|r| r.iter().map(|s| s.to_string()).collect())
+            .collect()
+    }
+
+    fn run(rows: &[&[&str]]) -> Vec<Vec<String>> {
+        let mut got = Solution::accounts_merge(to_input(rows));
+        got.sort();
+        got
+    }
+
+    #[test]
+    fn example_three_people() {
+        let got = run(&[
+            &["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+            &["John", "johnsmith@mail.com", "john00@mail.com"],
+            &["Mary", "mary@mail.com"],
+            &["John", "johnnybravo@mail.com"],
+        ]);
+        let mut want = to_input(&[
+            &[
+                "John",
+                "john00@mail.com",
+                "john_newyork@mail.com",
+                "johnsmith@mail.com",
+            ],
+            &["Mary", "mary@mail.com"],
+            &["John", "johnnybravo@mail.com"],
+        ]);
+        want.sort();
+        assert_eq!(got, want);
+    }
+
+    #[test]
+    fn single_account_with_duplicate_email() {
+        let got = run(&[&["Ann", "b@x", "a@x", "b@x"]]);
+        assert_eq!(got, to_input(&[&["Ann", "a@x", "b@x"]]));
+    }
+
+    #[test]
+    fn chain_of_accounts() {
+        // 1 shares with 2, 2 shares with 3: all three merge, although 1 and 3 share nothing.
+        let got = run(&[
+            &["Bo", "a@x", "b@x"],
+            &["Bo", "c@x", "d@x"],
+            &["Bo", "b@x", "c@x"],
+        ]);
+        assert_eq!(got, to_input(&[&["Bo", "a@x", "b@x", "c@x", "d@x"]]));
+    }
+
+    #[test]
+    fn same_name_different_people() {
+        let got = run(&[&["Al", "1@x"], &["Al", "2@x"]]);
+        assert_eq!(got, to_input(&[&["Al", "1@x"], &["Al", "2@x"]]));
+    }
+
+    #[test]
+    fn many_accounts_in_one_chain() {
+        let rows: Vec<Vec<String>> = (0..1000)
+            .map(|i| {
+                vec![
+                    "Zed".to_string(),
+                    format!("{i:04}@x"),
+                    format!("{:04}@x", i + 1),
+                ]
+            })
+            .collect();
+        let got = Solution::accounts_merge(rows);
+        assert_eq!(got.len(), 1);
+        assert_eq!(got[0].len(), 1 + 1001);
+        assert_eq!(got[0][1], "0000@x");
+        assert_eq!(got[0][1001], "1000@x");
+    }
+}

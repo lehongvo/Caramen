@@ -32,19 +32,19 @@ python3 -I learn_11_leetcode_practice/tools/progress.py
 
 <!-- PRACTICE_PROGRESS:START -->
 
-_Last updated: 2026-11-28 21:29. Run `python3 -I learn_11_leetcode_practice/tools/progress.py` to refresh._
+_Last updated: 2026-11-28 23:02. Run `python3 -I learn_11_leetcode_practice/tools/progress.py` to refresh._
 
 | Level | Solved | Progress | Started | Next problem |
 | ----- | ------ | -------- | ------- | ------------ |
 | [1. Basics](learn_11_leetcode_practice/level_01_basics/README.md) | 0/100 | `░░░░░░░░░░   0%` | - | [0001](learn_11_leetcode_practice/level_01_basics/exercises/p0001_fizz_buzz.md) |
-| [2. Ownership & Strings](learn_11_leetcode_practice/level_02_ownership_strings/README.md) (being written) | 0/71 | `░░░░░░░░░░   0%` | - | [0101](learn_11_leetcode_practice/level_02_ownership_strings/exercises/p0101_take_and_give_back.md) |
-| [3. Structs, Enums & Pattern Matching](learn_11_leetcode_practice/level_03_structs_enums_match/README.md) | - | not available yet | - | - |
-| [4. Collections](learn_11_leetcode_practice/level_04_collections/README.md) | - | not available yet | - | - |
-| [5. Errors, Closures & Iterators](learn_11_leetcode_practice/level_05_errors_closures_iterators/README.md) | - | not available yet | - | - |
-| [6. Generics, Traits & Lifetimes](learn_11_leetcode_practice/level_06_generics_traits_lifetimes/README.md) | - | not available yet | - | - |
-| [7. Smart Pointers, Linked Lists & Trees](learn_11_leetcode_practice/level_07_smart_pointers_lists_trees/README.md) | - | not available yet | - | - |
-| [8. Algorithm Techniques](learn_11_leetcode_practice/level_08_algorithms/README.md) | - | not available yet | - | - |
-| [9. DP, Graphs & Concurrency](learn_11_leetcode_practice/level_09_dp_graphs_concurrency/README.md) | - | not available yet | - | - |
+| [2. Ownership & Strings](learn_11_leetcode_practice/level_02_ownership_strings/README.md) | 0/100 | `░░░░░░░░░░   0%` | - | [0101](learn_11_leetcode_practice/level_02_ownership_strings/exercises/p0101_take_and_give_back.md) |
+| [3. Structs, Enums & Pattern Matching](learn_11_leetcode_practice/level_03_structs_enums_match/README.md) | 0/100 | `░░░░░░░░░░   0%` | - | [0201](learn_11_leetcode_practice/level_03_structs_enums_match/exercises/p0201_rectangle_area.md) |
+| [4. Collections](learn_11_leetcode_practice/level_04_collections/README.md) | 0/100 | `░░░░░░░░░░   0%` | - | [0301](learn_11_leetcode_practice/level_04_collections/exercises/p0301_inspect_a_vector.md) |
+| [5. Errors, Closures & Iterators](learn_11_leetcode_practice/level_05_errors_closures_iterators/README.md) | 0/100 | `░░░░░░░░░░   0%` | - | [0401](learn_11_leetcode_practice/level_05_errors_closures_iterators/exercises/p0401_safe_division.md) |
+| [6. Generics, Traits & Lifetimes](learn_11_leetcode_practice/level_06_generics_traits_lifetimes/README.md) | 0/100 | `░░░░░░░░░░   0%` | - | [0501](learn_11_leetcode_practice/level_06_generics_traits_lifetimes/exercises/p0501_largest_in_slice.md) |
+| [7. Smart Pointers, Linked Lists & Trees](learn_11_leetcode_practice/level_07_smart_pointers_lists_trees/README.md) (being written) | 0/30 | `░░░░░░░░░░   0%` | - | [0601](learn_11_leetcode_practice/level_07_smart_pointers_lists_trees/exercises/p0601_cons_list_with_box.md) |
+| [8. Algorithm Techniques](learn_11_leetcode_practice/level_08_algorithms/README.md) (being written) | 0/40 | `░░░░░░░░░░   0%` | - | [0701](learn_11_leetcode_practice/level_08_algorithms/exercises/p0701_valid_palindrome_ii.md) |
+| [9. DP, Graphs & Concurrency](learn_11_leetcode_practice/level_09_dp_graphs_concurrency/README.md) (being written) | 0/20 | `░░░░░░░░░░   0%` | - | [0801](learn_11_leetcode_practice/level_09_dp_graphs_concurrency/exercises/p0801_n_th_tribonacci_number.md) |
 | [10. Advanced](learn_11_leetcode_practice/level_10_advanced/README.md) | - | not available yet | - | - |
 | **Total** | **0/1000** | `░░░░░░░░░░   0%` | | |
 

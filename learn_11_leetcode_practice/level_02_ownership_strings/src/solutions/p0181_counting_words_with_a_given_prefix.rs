@@ -61,7 +61,10 @@ mod tests {
     use super::*;
 
     fn run(words: &[&str], pref: &str) -> i32 {
-        Solution::prefix_count(words.iter().map(|w| w.to_string()).collect(), pref.to_string())
+        Solution::prefix_count(
+            words.iter().map(|w| w.to_string()).collect(),
+            pref.to_string(),
+        )
     }
 
     #[test]
@@ -86,7 +89,9 @@ mod tests {
 
     #[test]
     fn largest_input() {
-        let words: Vec<String> = (0..100).map(|i| format!("{}{}", "p".repeat(i % 3 + 1), "x".repeat(97))).collect();
+        let words: Vec<String> = (0..100)
+            .map(|i| format!("{}{}", "p".repeat(i % 3 + 1), "x".repeat(97)))
+            .collect();
         assert_eq!(Solution::prefix_count(words, "ppp".to_string()), 33);
     }
 }

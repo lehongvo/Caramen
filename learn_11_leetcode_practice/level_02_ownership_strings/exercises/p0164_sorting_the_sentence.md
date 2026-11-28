@@ -87,7 +87,10 @@ mod tests {
     #[test]
     fn nine_words_reversed() {
         let words = ["a", "bb", "ccc", "Dd", "e", "ff", "GGG", "hh", "i"];
-        let shuffled: Vec<String> = (0..9).rev().map(|i| format!("{}{}", words[i], i + 1)).collect();
+        let shuffled: Vec<String> = (0..9)
+            .rev()
+            .map(|i| format!("{}{}", words[i], i + 1))
+            .collect();
         assert_eq!(run(&shuffled.join(" ")), words.join(" "));
     }
 }

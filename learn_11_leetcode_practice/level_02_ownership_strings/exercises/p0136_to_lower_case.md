@@ -76,7 +76,10 @@ mod tests {
 
     #[test]
     fn example_with_digits_and_symbols() {
-        assert_eq!(Solution::to_lower_case("LOVELY 42!".to_string()), "lovely 42!");
+        assert_eq!(
+            Solution::to_lower_case("LOVELY 42!".to_string()),
+            "lovely 42!"
+        );
     }
 
     #[test]

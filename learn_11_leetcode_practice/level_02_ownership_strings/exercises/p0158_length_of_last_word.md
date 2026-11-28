@@ -92,7 +92,12 @@ mod tests {
 
     #[test]
     fn long_input() {
-        let s = format!("{}{}{}", "x ".repeat(4_000), "y".repeat(1_000), " ".repeat(500));
+        let s = format!(
+            "{}{}{}",
+            "x ".repeat(4_000),
+            "y".repeat(1_000),
+            " ".repeat(500)
+        );
         assert_eq!(run(&s), 1_000);
     }
 }

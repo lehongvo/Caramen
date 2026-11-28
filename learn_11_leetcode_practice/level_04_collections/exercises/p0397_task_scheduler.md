@@ -1,0 +1,175 @@
+# Problem 0397: Task Scheduler
+
+- **Difficulty:** Medium
+- **Topics:** counting into `[usize; 26]`, a max-heap of remaining counts, a cooldown `VecDeque<(ready_time, count)>`
+- **Source:** [LeetCode 621. Task Scheduler](https://leetcode.com/problems/task-scheduler/)
+
+## Problem
+
+A CPU must run a list of tasks, each labelled with an uppercase letter; tasks with the same
+label are identical. In every time unit (interval) the CPU either runs **one** task or stays
+**idle**. Two runs of the **same** label must be separated by at least `n` intervals (so after
+running `A` at time `t`, the next `A` can run at time `t + n + 1` at the earliest). Tasks may run
+in any order.
+
+Return the minimum number of intervals needed to run all tasks.
+
+Implement `Solution::least_interval(tasks: Vec<char>, n: i32) -> i32`.
+
+## Examples
+
+```text
+Input:  tasks = ['A', 'A', 'A', 'B', 'B', 'B'], n = 2
+Output: 8       (A B idle A B idle A B)
+
+Input:  tasks = ['A', 'C', 'A', 'B', 'D', 'B'], n = 1
+Output: 6       (A B C A B D: no idle time needed)
+
+Input:  tasks = ['A', 'A', 'A', 'B', 'B', 'B'], n = 3
+Output: 10      (A B idle idle A B idle idle A B)
+```
+
+## Constraints
+
+- `1 <= tasks.len() <= 10^4`, uppercase English letters
+- `0 <= n <= 100`
+
+## Hints
+
+1. Greedy: at every interval, run the available task with the **most** remaining copies.
+2. A max-heap holds the remaining counts of available labels. A label that just ran waits in a
+   queue with the time at which it becomes available again.
+
+## Starter code
+
+Write your code in [`src/practice/p0397_task_scheduler.rs`](../src/practice/p0397_task_scheduler.rs) (replace every `todo!(...)`, keep the tests unchanged), then run:
+
+```bash
+cargo test practice::p0397
+```
+
+```rust
+use std::collections::{BinaryHeap, VecDeque};
+
+pub struct Solution;
+
+impl Solution {
+    pub fn least_interval(tasks: Vec<char>, n: i32) -> i32 {
+        todo!("Write your solution here")
+    }
+}
+```
+
+## Tests
+
+<details>
+<summary>Show the tests used to check your solution</summary>
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn tasks(s: &str) -> Vec<char> {
+        s.chars().collect()
+    }
+
+    #[test]
+    fn example_one() {
+        assert_eq!(Solution::least_interval(tasks("AAABBB"), 2), 8);
+    }
+
+    #[test]
+    fn example_two_no_idle() {
+        assert_eq!(Solution::least_interval(tasks("ACABDB"), 1), 6);
+    }
+
+    #[test]
+    fn example_three() {
+        assert_eq!(Solution::least_interval(tasks("AAABBB"), 3), 10);
+    }
+
+    #[test]
+    fn no_cooldown_and_single_label() {
+        assert_eq!(Solution::least_interval(tasks("AAABBB"), 0), 6);
+        assert_eq!(Solution::least_interval(tasks("AAAA"), 2), 10);
+        assert_eq!(Solution::least_interval(tasks("A"), 100), 1);
+    }
+
+    #[test]
+    fn many_tasks_match_the_formula() {
+        let all: Vec<char> = (0..10_000)
+            .map(|i| (b'A' + (i % 7 * i % 26) as u8) as char)
+            .collect();
+        for n in [0, 1, 5, 50, 100] {
+            let mut counts = [0usize; 26];
+            for &t in &all {
+                counts[(t as u8 - b'A') as usize] += 1;
+            }
+            let max = *counts.iter().max().unwrap();
+            let ties = counts.iter().filter(|&&c| c == max).count();
+            let formula = all.len().max((max - 1) * (n + 1) + ties) as i32;
+            assert_eq!(Solution::least_interval(all.clone(), n as i32), formula);
+        }
+    }
+}
+```
+
+</details>
+
+## Answer
+
+<details>
+<summary>Show the answer</summary>
+
+**Idea:** simulate time. At each interval, pop the largest remaining count from the heap (if
+any) and run that task; if copies remain, put `(time + n, count - 1)` into a FIFO cooldown
+queue. At the end of the interval, a label whose cooldown ends now returns to the heap. Idle
+intervals happen naturally when the heap is empty but the queue is not. Because every label
+waits exactly `n` intervals, the queue is always ordered by ready time.
+
+**Complexity:** `O(T log 26)` for `T` intervals (at most `tasks.len() * (n + 1)`), `O(26)` space.
+
+There is also a closed formula: with `max` the largest count and `ties` the number of labels
+having it, the answer is `max(tasks.len(), (max - 1) * (n + 1) + ties)`.
+
+**Rust concepts:**
+- The heap only stores counts (labels do not matter for the length of the schedule).
+- `cooldown.front().is_some_and(|&(ready, _)| ready == time)` peeks at the queue head.
+- `while !heap.is_empty() || !cooldown.is_empty()` runs until every task has been executed.
+
+```rust
+use std::collections::{BinaryHeap, VecDeque};
+
+pub struct Solution;
+
+impl Solution {
+    pub fn least_interval(tasks: Vec<char>, n: i32) -> i32 {
+        let mut counts = [0usize; 26];
+        for t in tasks {
+            counts[(t as u8 - b'A') as usize] += 1;
+        }
+        let mut heap: BinaryHeap<usize> = counts.into_iter().filter(|&c| c > 0).collect();
+        let mut cooldown: VecDeque<(i32, usize)> = VecDeque::new();
+        let mut time = 0;
+        while !heap.is_empty() || !cooldown.is_empty() {
+            time += 1;
+            if let Some(count) = heap.pop() {
+                if count > 1 {
+                    cooldown.push_back((time + n, count - 1));
+                }
+            }
+            if cooldown.front().is_some_and(|&(ready, _)| ready == time) {
+                if let Some((_, count)) = cooldown.pop_front() {
+                    heap.push(count);
+                }
+            }
+        }
+        time
+    }
+}
+```
+
+Full tested solution: [`src/solutions/p0397_task_scheduler.rs`](../src/solutions/p0397_task_scheduler.rs)
+
+</details>

@@ -92,7 +92,10 @@ mod tests {
 
     #[test]
     fn example_short_word_in_the_middle() {
-        assert_eq!(run("First leTTeR of EACH Word"), "First Letter of Each Word");
+        assert_eq!(
+            run("First leTTeR of EACH Word"),
+            "First Letter of Each Word"
+        );
     }
 
     #[test]

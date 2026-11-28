@@ -81,7 +81,7 @@ mod tests {
 
     #[test]
     fn largest_input() {
-        // 142 full weeks: sum of (28 + 7k) for k = 0..142 = 28*142 + 7*142*141/2 = 73_773.
+        // 142 full weeks: sum of (28 + 7k) for k = 0..142 = 28*142 + 7*142*141/2 = 74_053.
         // Then 6 more days starting at 143: 143 + ... + 148 = 873.
         assert_eq!(Solution::total_money(1000), 74_926);
     }

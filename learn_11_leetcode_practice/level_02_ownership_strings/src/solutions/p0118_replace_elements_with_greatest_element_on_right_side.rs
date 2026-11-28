@@ -84,12 +84,18 @@ mod tests {
 
     #[test]
     fn increasing_values() {
-        assert_eq!(Solution::replace_elements(vec![1, 2, 3, 4]), vec![4, 4, 4, -1]);
+        assert_eq!(
+            Solution::replace_elements(vec![1, 2, 3, 4]),
+            vec![4, 4, 4, -1]
+        );
     }
 
     #[test]
     fn decreasing_values() {
-        assert_eq!(Solution::replace_elements(vec![4, 3, 2, 1]), vec![3, 2, 1, -1]);
+        assert_eq!(
+            Solution::replace_elements(vec![4, 3, 2, 1]),
+            vec![3, 2, 1, -1]
+        );
     }
 
     #[test]

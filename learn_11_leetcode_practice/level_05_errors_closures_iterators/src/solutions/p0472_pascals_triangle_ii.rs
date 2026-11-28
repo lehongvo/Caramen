@@ -1,0 +1,121 @@
+//! # Problem 0472: Pascal's Triangle II
+//!
+//! - **Difficulty:** Easy
+//! - **Topics:** `iter::successors` to generate rows, `windows(2)`, `iter::once` + `chain`, `nth`, `checked_add` collected into `Option<Vec<_>>`
+//! - **Source:** [LeetCode 119. Pascal's Triangle II](https://leetcode.com/problems/pascals-triangle-ii/)
+//!
+//! ## Problem
+//!
+//! In Pascal's triangle, row `0` is `[1]`, and every next row starts and ends with `1` while each
+//! inner value is the sum of the two values just above it:
+//!
+//! ```text
+//! row 0:        1
+//! row 1:       1 1
+//! row 2:      1 2 1
+//! row 3:     1 3 3 1
+//! row 4:    1 4 6 4 1
+//! ```
+//!
+//! Given `row_index`, return that row (0-based).
+//!
+//! Implement `Solution::get_row(row_index: i32) -> Vec<i32>`.
+//!
+//! ## Examples
+//!
+//! ```text
+//! Input:  row_index = 3
+//! Output: [1, 3, 3, 1]
+//!
+//! Input:  row_index = 0
+//! Output: [1]
+//!
+//! Input:  row_index = 1
+//! Output: [1, 1]
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `0 <= row_index <= 33` (every value fits in an `i32`).
+//!
+//! ## Hints
+//!
+//! 1. Next row = `1`, then the sums of neighbouring pairs of the previous row, then `1`.
+//!    `prev.windows(2).map(|w| w[0] + w[1])` gives the sums.
+//! 2. `iter::successors(Some(first), |prev| next_of(prev))` is an iterator of rows; `nth(k)` picks
+//!    row `k`.
+//! 3. Careful: `successors` computes the **next** item at the moment it returns the current one, so
+//!    asking for row 33 also builds row 34, whose middle values do not fit in an `i32`. Use
+//!    `checked_add` and let the closure return `None` on overflow.
+// @solution-start remove
+//!
+//! ## Solution
+//!
+//! **Idea:** describe how to get from one row to the next and let `iter::successors` produce the
+//! lazy sequence of rows; `nth(row_index)` stops as soon as the wanted row is reached. The step
+//! returns `None` when a value would overflow an `i32`, which ends the sequence after row 33
+//! instead of panicking while computing row 34 in advance.
+//!
+//! **Complexity:** `O(k^2)` time for row `k`; at most two rows are alive at any moment, so `O(k)`
+//! space.
+//!
+//! **Rust concepts:**
+//! - `iter::successors(first, f)` calls `f(&previous)` to compute each next item. It is lazy, but
+//!   always **one step ahead**: when it hands out an item it has already computed the next one.
+//! - Collecting `Option<i32>` values into `Option<Vec<i32>>` gives `None` if any sum overflowed.
+//! - `once(1).chain(...).chain(once(1))` builds a row from three parts without index arithmetic.
+//! - `nth(n)` consumes `n + 1` items and returns the last one; `unwrap_or_default()` keeps the code
+//!   panic-free (it is never reached for `row_index <= 33`).
+// @solution-end
+
+use std::iter;
+
+pub struct Solution;
+
+impl Solution {
+    pub fn get_row(row_index: i32) -> Vec<i32> {
+        // @solution-start
+        iter::successors(Some(vec![1]), |prev: &Vec<i32>| {
+            // `None` as soon as a sum overflows: the sequence then simply ends.
+            let inner: Option<Vec<i32>> = prev.windows(2).map(|w| w[0].checked_add(w[1])).collect();
+            inner.map(|inner| iter::once(1).chain(inner).chain(iter::once(1)).collect())
+        })
+        .nth(row_index as usize)
+        .unwrap_or_default()
+        // @solution-end
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_row_three() {
+        assert_eq!(Solution::get_row(3), vec![1, 3, 3, 1]);
+    }
+
+    #[test]
+    fn example_first_rows() {
+        assert_eq!(Solution::get_row(0), vec![1]);
+        assert_eq!(Solution::get_row(1), vec![1, 1]);
+        assert_eq!(Solution::get_row(4), vec![1, 4, 6, 4, 1]);
+    }
+
+    #[test]
+    fn largest_row() {
+        let row = Solution::get_row(33);
+        assert_eq!(row.len(), 34);
+        assert_eq!(row[16], 1_166_803_110);
+        assert_eq!(row[1], 33);
+        assert_eq!(row.iter().map(|&x| x as i64).sum::<i64>(), 1i64 << 33);
+    }
+
+    #[test]
+    fn rows_are_symmetric() {
+        for k in 0..=33 {
+            let row = Solution::get_row(k);
+            assert!(row.iter().eq(row.iter().rev()));
+        }
+    }
+}

@@ -92,7 +92,10 @@ mod tests {
 
     #[test]
     fn example_three_copies() {
-        assert_eq!(repeat_lines(String::from("hip"), 3), vec!["hip", "hip", "hip"]);
+        assert_eq!(
+            repeat_lines(String::from("hip"), 3),
+            vec!["hip", "hip", "hip"]
+        );
     }
 
     #[test]

@@ -80,7 +80,10 @@ mod tests {
 
     #[test]
     fn example_remove_twos() {
-        assert_eq!(run(vec![0, 1, 2, 2, 3, 0, 4, 2], 2), (5, vec![0, 0, 1, 3, 4]));
+        assert_eq!(
+            run(vec![0, 1, 2, 2, 3, 0, 4, 2], 2),
+            (5, vec![0, 0, 1, 3, 4])
+        );
     }
 
     #[test]

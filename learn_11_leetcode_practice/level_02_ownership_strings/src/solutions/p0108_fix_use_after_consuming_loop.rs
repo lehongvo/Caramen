@@ -108,12 +108,18 @@ mod tests {
 
     #[test]
     fn example_colors() {
-        assert_eq!(total_and_longest(owned(&["red", "green", "blue"])), (12, "green".to_string()));
+        assert_eq!(
+            total_and_longest(owned(&["red", "green", "blue"])),
+            (12, "green".to_string())
+        );
     }
 
     #[test]
     fn example_tie_keeps_first() {
-        assert_eq!(total_and_longest(owned(&["ab", "cd"])), (4, "ab".to_string()));
+        assert_eq!(
+            total_and_longest(owned(&["ab", "cd"])),
+            (4, "ab".to_string())
+        );
     }
 
     #[test]
@@ -128,7 +134,10 @@ mod tests {
 
     #[test]
     fn longest_at_the_end() {
-        assert_eq!(total_and_longest(owned(&["a", "bb", "ccc"])), (6, "ccc".to_string()));
+        assert_eq!(
+            total_and_longest(owned(&["a", "bb", "ccc"])),
+            (6, "ccc".to_string())
+        );
     }
 
     #[test]

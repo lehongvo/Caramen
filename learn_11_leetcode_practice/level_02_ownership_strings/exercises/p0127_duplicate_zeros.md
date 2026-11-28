@@ -86,7 +86,10 @@ mod tests {
 
     #[test]
     fn example_three_zeros() {
-        assert_eq!(run(vec![1, 0, 2, 3, 0, 4, 5, 0]), vec![1, 0, 0, 2, 3, 0, 0, 4]);
+        assert_eq!(
+            run(vec![1, 0, 2, 3, 0, 4, 5, 0]),
+            vec![1, 0, 0, 2, 3, 0, 0, 4]
+        );
     }
 
     #[test]

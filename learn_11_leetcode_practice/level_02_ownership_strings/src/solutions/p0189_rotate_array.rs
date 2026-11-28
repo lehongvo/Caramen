@@ -81,7 +81,10 @@ mod tests {
 
     #[test]
     fn example_by_three() {
-        assert_eq!(rotated(vec![1, 2, 3, 4, 5, 6, 7], 3), vec![5, 6, 7, 1, 2, 3, 4]);
+        assert_eq!(
+            rotated(vec![1, 2, 3, 4, 5, 6, 7], 3),
+            vec![5, 6, 7, 1, 2, 3, 4]
+        );
     }
 
     #[test]

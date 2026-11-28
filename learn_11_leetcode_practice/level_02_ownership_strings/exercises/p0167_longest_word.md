@@ -104,7 +104,12 @@ mod tests {
 
     #[test]
     fn large_input() {
-        let text = format!("{} {} {}", "ab ".repeat(20_000), "z".repeat(50), "y".repeat(50));
+        let text = format!(
+            "{} {} {}",
+            "ab ".repeat(20_000),
+            "z".repeat(50),
+            "y".repeat(50)
+        );
         assert_eq!(longest_word(&text), "z".repeat(50));
     }
 }

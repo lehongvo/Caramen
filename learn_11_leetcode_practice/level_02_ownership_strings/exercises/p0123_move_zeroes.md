@@ -84,12 +84,17 @@ mod tests {
 
     #[test]
     fn zeros_already_at_the_end_and_extremes() {
-        assert_eq!(moved(vec![i32::MIN, 0, i32::MAX, 0]), vec![i32::MIN, i32::MAX, 0, 0]);
+        assert_eq!(
+            moved(vec![i32::MIN, 0, i32::MAX, 0]),
+            vec![i32::MIN, i32::MAX, 0, 0]
+        );
     }
 
     #[test]
     fn large_input() {
-        let nums: Vec<i32> = (0..10_000).map(|i| if i % 2 == 0 { 0 } else { i }).collect();
+        let nums: Vec<i32> = (0..10_000)
+            .map(|i| if i % 2 == 0 { 0 } else { i })
+            .collect();
         let result = moved(nums);
         let expected: Vec<i32> = (0..10_000)
             .filter(|i| i % 2 == 1)

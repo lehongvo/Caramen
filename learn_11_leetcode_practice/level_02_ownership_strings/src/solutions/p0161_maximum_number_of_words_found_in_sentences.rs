@@ -85,7 +85,10 @@ mod tests {
 
     #[test]
     fn example_tie() {
-        assert_eq!(run(&["please wait", "continue to fight", "continue to win"]), 3);
+        assert_eq!(
+            run(&["please wait", "continue to fight", "continue to win"]),
+            3
+        );
     }
 
     #[test]

@@ -77,7 +77,10 @@ mod tests {
 
     #[test]
     fn example_drop_several_words() {
-        assert_eq!(run("What is the solution to this problem", 4), "What is the solution");
+        assert_eq!(
+            run("What is the solution to this problem", 4),
+            "What is the solution"
+        );
     }
 
     #[test]

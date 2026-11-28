@@ -68,7 +68,10 @@ mod tests {
 
     #[test]
     fn example_run_in_the_middle() {
-        assert_eq!(longest_increasing_run(&[5, 1, 2, 3, 2, 4, 6, 8, 1]), &[2, 4, 6, 8]);
+        assert_eq!(
+            longest_increasing_run(&[5, 1, 2, 3, 2, 4, 6, 8, 1]),
+            &[2, 4, 6, 8]
+        );
     }
 
     #[test]

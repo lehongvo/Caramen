@@ -63,7 +63,10 @@ mod tests {
 
     #[test]
     fn example_mixed_whitespace() {
-        assert_eq!(normalize_whitespace("  the   quick\tbrown \n fox  "), "the quick brown fox");
+        assert_eq!(
+            normalize_whitespace("  the   quick\tbrown \n fox  "),
+            "the quick brown fox"
+        );
     }
 
     #[test]

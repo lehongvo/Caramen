@@ -74,12 +74,18 @@ mod tests {
 
     #[test]
     fn example_speak_goat_latin() {
-        assert_eq!(goat("I speak Goat Latin"), "Imaa peaksmaaa oatGmaaaa atinLmaaaaa");
+        assert_eq!(
+            goat("I speak Goat Latin"),
+            "Imaa peaksmaaa oatGmaaaa atinLmaaaaa"
+        );
     }
 
     #[test]
     fn example_quick_brown_fox() {
-        assert_eq!(goat("The quick brown fox"), "heTmaa uickqmaaa rownbmaaaa oxfmaaaaa");
+        assert_eq!(
+            goat("The quick brown fox"),
+            "heTmaa uickqmaaa rownbmaaaa oxfmaaaaa"
+        );
     }
 
     #[test]

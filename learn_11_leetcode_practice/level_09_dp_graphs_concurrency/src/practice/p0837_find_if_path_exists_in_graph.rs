@@ -1,0 +1,96 @@
+// ==================================================================
+// PRACTICE 0837: replace every `todo!(...)` with your code; keep the tests unchanged.
+// Full problem statement: exercises/p0837_find_if_path_exists_in_graph.md
+// Run the tests:          cargo test practice::p0837
+// ==================================================================
+
+//! # Problem 0837: Find if Path Exists in Graph
+//!
+//! - **Difficulty:** Easy
+//! - **Topics:** adjacency list `Vec<Vec<usize>>`, breadth-first search with `VecDeque`, visited
+//!   vector
+//! - **Source:** [LeetCode 1971. Find if Path Exists in Graph](https://leetcode.com/problems/find-if-path-exists-in-graph/)
+//!
+//! ## Problem
+//!
+//! An **undirected** graph has `n` vertices labelled `0` to `n - 1`; `edges[i] = [u, v]` connects
+//! `u` and `v`. There are no self-loops and no duplicate edges. Return `true` if there is a path
+//! from `source` to `destination`, and `false` otherwise. A vertex always reaches itself.
+//!
+//! Implement `Solution::valid_path(n: i32, edges: Vec<Vec<i32>>, source: i32, destination: i32) -> bool`.
+//!
+//! ## Examples
+//!
+//! ```text
+//! Input:  n = 3, edges = [[0, 1], [1, 2], [2, 0]], source = 0, destination = 2
+//! Output: true
+//!
+//! Input:  n = 6, edges = [[0, 1], [0, 2], [3, 5], [5, 4], [4, 3]], source = 0, destination = 5
+//! Output: false
+//! Explanation: {0, 1, 2} and {3, 4, 5} are separate components.
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `1 <= n <= 2 * 10^5`
+//! - `0 <= edges.len() <= 2 * 10^5`
+//! - `0 <= u, v, source, destination < n`, `u != v`
+//!
+//! ## Hints
+//!
+//! 1. Turn the edge list into an adjacency list: `adj[u]` holds every neighbour of `u`. Add each
+//!    undirected edge in both directions.
+//! 2. Explore from `source` with a queue (BFS) or a stack (DFS), marking vertices as visited when
+//!    you first push them.
+//! 3. Avoid recursion here: a path graph with `2 * 10^5` vertices would overflow the call stack.
+
+use std::collections::VecDeque;
+
+pub struct Solution;
+
+impl Solution {
+    pub fn valid_path(n: i32, edges: Vec<Vec<i32>>, source: i32, destination: i32) -> bool {
+        todo!("Write your solution here")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn edges(list: &[[i32; 2]]) -> Vec<Vec<i32>> {
+        list.iter().map(|e| e.to_vec()).collect()
+    }
+
+    #[test]
+    fn example_triangle() {
+        let e = edges(&[[0, 1], [1, 2], [2, 0]]);
+        assert!(Solution::valid_path(3, e, 0, 2));
+    }
+
+    #[test]
+    fn example_two_components() {
+        let e = edges(&[[0, 1], [0, 2], [3, 5], [5, 4], [4, 3]]);
+        assert!(!Solution::valid_path(6, e, 0, 5));
+    }
+
+    #[test]
+    fn source_equals_destination() {
+        assert!(Solution::valid_path(1, vec![], 0, 0));
+        assert!(Solution::valid_path(3, vec![], 2, 2));
+    }
+
+    #[test]
+    fn isolated_destination() {
+        let e = edges(&[[0, 1], [1, 2]]);
+        assert!(!Solution::valid_path(4, e, 0, 3));
+    }
+
+    #[test]
+    fn long_path_graph() {
+        let n = 200_000;
+        let e: Vec<Vec<i32>> = (0..n - 1).map(|i| vec![i, i + 1]).collect();
+        assert!(Solution::valid_path(n, e.clone(), 0, n - 1));
+        assert!(Solution::valid_path(n, e, n - 1, 0));
+    }
+}

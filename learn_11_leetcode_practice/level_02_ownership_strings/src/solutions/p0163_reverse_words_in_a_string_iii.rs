@@ -75,7 +75,10 @@ mod tests {
 
     #[test]
     fn example_contest() {
-        assert_eq!(run("Let's take LeetCode contest"), "s'teL ekat edoCteeL tsetnoc");
+        assert_eq!(
+            run("Let's take LeetCode contest"),
+            "s'teL ekat edoCteeL tsetnoc"
+        );
     }
 
     #[test]

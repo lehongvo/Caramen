@@ -108,7 +108,11 @@ mod tests {
 
     #[test]
     fn matches_integer_addition() {
-        for (x, y) in [(0u64, 12_345u64), (98_765, 43_210), (u32::MAX as u64, u32::MAX as u64)] {
+        for (x, y) in [
+            (0u64, 12_345u64),
+            (98_765, 43_210),
+            (u32::MAX as u64, u32::MAX as u64),
+        ] {
             assert_eq!(add(&x.to_string(), &y.to_string()), (x + y).to_string());
         }
     }

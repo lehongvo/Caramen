@@ -84,7 +84,10 @@ mod tests {
     #[test]
     fn matches_integer_addition() {
         for (x, y) in [(5u64, 9u64), (255, 1), (1023, 1023), (123_456, 654_321)] {
-            assert_eq!(add(&format!("{x:b}"), &format!("{y:b}")), format!("{:b}", x + y));
+            assert_eq!(
+                add(&format!("{x:b}"), &format!("{y:b}")),
+                format!("{:b}", x + y)
+            );
         }
     }
 

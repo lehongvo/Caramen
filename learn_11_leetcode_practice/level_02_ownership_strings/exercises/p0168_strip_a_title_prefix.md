@@ -97,7 +97,10 @@ mod tests {
 
     #[test]
     fn example_with_title() {
-        assert_eq!(with_title("Mr. Grace Hopper", "Rear Admiral"), "Rear Admiral Grace Hopper");
+        assert_eq!(
+            with_title("Mr. Grace Hopper", "Rear Admiral"),
+            "Rear Admiral Grace Hopper"
+        );
     }
 
     #[test]
@@ -149,7 +152,10 @@ const TITLES: [&str; 5] = ["Dr.", "Mr.", "Mrs.", "Ms.", "Prof."];
 pub fn strip_title(name: &str) -> &str {
     let name = name.trim();
     for title in TITLES {
-        if let Some(rest) = name.strip_prefix(title).filter(|rest| rest.starts_with(' ')) {
+        if let Some(rest) = name
+            .strip_prefix(title)
+            .filter(|rest| rest.starts_with(' '))
+        {
             return rest.trim_start();
         }
     }
