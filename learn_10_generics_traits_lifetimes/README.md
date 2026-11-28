@@ -2,13 +2,17 @@
 
 > Tài liệu học tập về generics (kiểu tổng quát), trait và lifetime trong Rust: khái niệm, cú pháp, thực hành và bài tập có đáp án.
 
-| Thông tin | Chi tiết |
-|---|---|
-| Chủ đề | Generics, trait, trait bound, `derive`, trait object (`dyn`), lifetime |
-| Môi trường | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024 |
-| Dự án | `learn_10_generics_traits_lifetimes` (thư mục này) |
-| Bài trước | [error_handling](../learn_09_error_handling/README.md) |
-| Nguồn tham khảo chính | *The Rust Programming Language*, chương 10 và mục 18.2 (trait object) |
+
+| Thông tin             | Chi tiết                                                               |
+| --------------------- | ---------------------------------------------------------------------- |
+| Chủ đề                | Generics, trait, trait bound, `derive`, trait object (`dyn`), lifetime |
+| Môi trường            | Rust 1.99.1 (stable), Cargo 1.99.1, edition 2024                       |
+| Dự án                 | `learn_10_generics_traits_lifetimes` (thư mục này)                     |
+| Bài trước             | [error_handling](../learn_09_error_handling/README.md)                 |
+| Nguồn tham khảo chính | *The Rust Programming Language*, chương 10 và mục 18.2 (trait object)  |
+
+
+
 
 ## Mục lục
 
@@ -25,6 +29,8 @@
 11. [Tài liệu tham khảo](#11-tài-liệu-tham-khảo)
 
 ---
+
+
 
 ## 1. Mục tiêu bài học
 
@@ -60,17 +66,23 @@ Các ví dụ được đánh dấu như sau:
 
 ---
 
+
+
 ## 2. Khái niệm
+
+
 
 ### 2.1 Ba công cụ, ba câu hỏi
 
 Ba chủ đề của bài này đều xoay quanh một mục tiêu: **viết code một lần, dùng cho nhiều trường hợp mà vẫn an toàn**. Mỗi công cụ trả lời một câu hỏi khác nhau:
 
-| Công cụ | Câu hỏi nó trả lời | Dấu hiệu nhận biết | Ví dụ quen thuộc |
-|---|---|---|---|
-| **Generics** | Code này dùng được cho **kiểu nào**? | `<T>` | `Vec<T>`, `Option<T>` |
-| **Trait** | Một kiểu **làm được gì**? | `trait`, `impl ... for ...`, `T: Trait` | `Display`, `Clone` |
-| **Lifetime** | Một tham chiếu **hợp lệ trong bao lâu**? | `'a` | `&'a str` |
+
+| Công cụ      | Câu hỏi nó trả lời                       | Dấu hiệu nhận biết                      | Ví dụ quen thuộc      |
+| ------------ | ---------------------------------------- | --------------------------------------- | --------------------- |
+| **Generics** | Code này dùng được cho **kiểu nào**?     | `<T>`                                   | `Vec<T>`, `Option<T>` |
+| **Trait**    | Một kiểu **làm được gì**?                | `trait`, `impl ... for ...`, `T: Trait` | `Display`, `Clone`    |
+| **Lifetime** | Một tham chiếu **hợp lệ trong bao lâu**? | `'a`                                    | `&'a str`             |
+
 
 Ví dụ sau dùng cả ba trong một chữ ký hàm:
 
@@ -109,31 +121,39 @@ Cách đọc `fn longest_with_note<'a, T: Display>(x: &'a str, y: &'a str, note:
 
 ### 2.2 Vì sao cần
 
-| Công cụ | Không có nó thì sao | Có nó thì được gì |
-|---|---|---|
-| Generics | Viết lại cùng một hàm cho `i32`, `f64`, `char`... | Một hàm duy nhất cho mọi kiểu phù hợp |
-| Trait | Không có cách chung để nói "kiểu này in được, so sánh được, vẽ được" | Quy ước hành vi chung, code dùng được cho mọi kiểu có hành vi đó |
-| Lifetime | Tham chiếu có thể trỏ vào vùng nhớ đã bị huỷ (lỗi *dangling reference*), thường chỉ phát hiện lúc chạy | Compiler chặn lỗi này ngay lúc biên dịch, không cần bộ gom rác |
+
+| Công cụ  | Không có nó thì sao                                                                                    | Có nó thì được gì                                                |
+| -------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| Generics | Viết lại cùng một hàm cho `i32`, `f64`, `char`...                                                      | Một hàm duy nhất cho mọi kiểu phù hợp                            |
+| Trait    | Không có cách chung để nói "kiểu này in được, so sánh được, vẽ được"                                   | Quy ước hành vi chung, code dùng được cho mọi kiểu có hành vi đó |
+| Lifetime | Tham chiếu có thể trỏ vào vùng nhớ đã bị huỷ (lỗi *dangling reference*), thường chỉ phát hiện lúc chạy | Compiler chặn lỗi này ngay lúc biên dịch, không cần bộ gom rác   |
+
 
 Cả ba đều được kiểm tra **lúc biên dịch**. Chương trình đã biên dịch thì không còn các lỗi tương ứng.
 
 ### 2.3 Bảng ký hiệu
 
-| Ký hiệu | Đọc là | Ví dụ |
-|---|---|---|
-| `<T>` | Kiểu tổng quát tên `T` | `fn largest<T>(list: &[T])` |
-| `T: Display` | `T` phải có trait `Display` (trait bound) | `fn show<T: Display>(x: T)` |
+
+| Ký hiệu            | Đọc là                                          | Ví dụ                            |
+| ------------------ | ----------------------------------------------- | -------------------------------- |
+| `<T>`              | Kiểu tổng quát tên `T`                          | `fn largest<T>(list: &[T])`      |
+| `T: Display`       | `T` phải có trait `Display` (trait bound)       | `fn show<T: Display>(x: T)`      |
 | `where T: Display` | Cách viết bound khác, dễ đọc khi có nhiều bound | `fn f<T>(x: T) where T: Display` |
-| `impl Trait` | "Một kiểu nào đó có trait này" | `fn f(x: &impl Display)` |
-| `dyn Trait` | Trait object: kiểu cụ thể chỉ biết lúc chạy | `Box<dyn Display>` |
-| `'a` | Tên một lifetime | `&'a str` |
-| `'static` | Lifetime kéo dài suốt chương trình | `&'static str` |
+| `impl Trait`       | "Một kiểu nào đó có trait này"                  | `fn f(x: &impl Display)`         |
+| `dyn Trait`        | Trait object: kiểu cụ thể chỉ biết lúc chạy     | `Box<dyn Display>`               |
+| `'a`               | Tên một lifetime                                | `&'a str`                        |
+| `'static`          | Lifetime kéo dài suốt chương trình              | `&'static str`                   |
+
 
 Quy ước đặt tên: tham số kiểu thường là một chữ in hoa (`T` là *Type*, `U`, `V` là các kiểu tiếp theo, `E` là *Error*). Lifetime là chữ thường ngắn: `'a`, `'b`.
 
 ---
 
+
+
 ## 3. Generics
+
+
 
 ### 3.1 Vấn đề: lặp code
 
@@ -221,7 +241,7 @@ help: consider restricting type parameter `T` with trait `PartialOrd`
   |             ++++++++++++++++++++++
 ```
 
-Lỗi cho biết compiler **chưa biết `T` có so sánh được bằng `>` hay không**. `T` có thể là số, nhưng cũng có thể là một kiểu không có thứ tự. Rust kiểm tra thân hàm generic **một lần duy nhất** dựa trên những gì ta cam kết về `T`, chứ không đợi đến lúc gọi hàm. Dòng `help:` gợi ý đúng cách sửa: thêm **trait bound** `T: PartialOrd` (mục [4.4](#44-trait-làm-tham-số-và-trait-bound)).
+Lỗi cho biết compiler **chưa biết** `T` **có so sánh được bằng** `>` **hay không**. `T` có thể là số, nhưng cũng có thể là một kiểu không có thứ tự. Rust kiểm tra thân hàm generic **một lần duy nhất** dựa trên những gì ta cam kết về `T`, chứ không đợi đến lúc gọi hàm. Dòng `help:` gợi ý đúng cách sửa: thêm **trait bound** `T: PartialOrd` (mục [4.4](#44-trait-làm-tham-số-và-trait-bound)).
 
 ```rust
 fn largest<T: PartialOrd>(list: &[T]) -> &T {
@@ -258,6 +278,8 @@ Lưu ý:
 - `PartialOrd` là trait của các kiểu so sánh được thứ tự (`<`, `>`, `<=`, `>=`). Số, `char` và `&str` đều có.
 - Hàm trả về `&T` (tham chiếu) nên không cần sao chép phần tử. Mục [8.2](#82-lỗi-biên-dịch) giải thích vì sao trả về `T` sẽ lỗi.
 - Slice rỗng làm `list[0]` panic. Trong code thật, nên kiểm tra `list.is_empty()` hoặc trả về `Option<&T>`.
+
+
 
 ### 3.3 Struct generic
 
@@ -334,6 +356,8 @@ x = 5, y = 4.0
 Point { x: "một", y: 'z' }
 ```
 
+
+
 ### 3.4 Enum generic
 
 `enum` cũng generic được. Hai `enum` bạn dùng hằng ngày trong thư viện chuẩn được định nghĩa như sau:
@@ -376,6 +400,8 @@ fn main() {
 Left(5) Right("năm")
 Some(5) Ok(7)
 ```
+
+
 
 ### 3.5 Phương thức generic
 
@@ -475,15 +501,21 @@ Option<u64>: 16 byte
 
 Đánh đổi của cách làm này:
 
-| | Tác động |
-|---|---|
-| Tốc độ chạy | Giống hệt việc tự viết từng hàm riêng (*zero-cost abstraction*) |
-| Thời gian biên dịch | Lâu hơn một chút |
-| Kích thước file chạy | Có thể lớn hơn khi dùng một hàm generic với rất nhiều kiểu |
+
+|                      | Tác động                                                        |
+| -------------------- | --------------------------------------------------------------- |
+| Tốc độ chạy          | Giống hệt việc tự viết từng hàm riêng (*zero-cost abstraction*) |
+| Thời gian biên dịch  | Lâu hơn một chút                                                |
+| Kích thước file chạy | Có thể lớn hơn khi dùng một hàm generic với rất nhiều kiểu      |
+
 
 ---
 
+
+
 ## 4. Trait
+
+
 
 ### 4.1 Trait là gì
 
@@ -629,10 +661,12 @@ Tin mới! Bài báo
 Tin mới! Tweet
 ```
 
-| Cách viết | Tên gọi | Ghi chú |
-|---|---|---|
-| `item: &impl Summary` | Cú pháp `impl Trait` | Ngắn gọn, đủ cho hầu hết trường hợp |
-| `<T: Summary>(item: &T)` | Trait bound | Đầy đủ, cần khi phải nhắc lại cùng một kiểu `T` ở nhiều chỗ (mục [7.1](#71-generic-impl-trait-hay-dyn-trait)) |
+
+| Cách viết                | Tên gọi              | Ghi chú                                                                                                       |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `item: &impl Summary`    | Cú pháp `impl Trait` | Ngắn gọn, đủ cho hầu hết trường hợp                                                                           |
+| `<T: Summary>(item: &T)` | Trait bound          | Đầy đủ, cần khi phải nhắc lại cùng một kiểu `T` ở nhiều chỗ (mục [7.1](#71-generic-impl-trait-hay-dyn-trait)) |
+
 
 Khi cần **nhiều trait cùng lúc**, nối bằng dấu `+`. Khi chữ ký dài, chuyển bound xuống mệnh đề `where` cho dễ đọc:
 
@@ -671,6 +705,8 @@ Lớn hơn: 8
 Lớn hơn: cam
 Rust / [1, 2]
 ```
+
+
 
 ### 4.5 Trả về impl Trait
 
@@ -742,16 +778,20 @@ Lớn nhất là y = 8
 Lớn nhất là x = cam
 ```
 
+
+
 ### 4.7 Quy tắc orphan
 
 Bạn chỉ được triển khai một trait cho một kiểu khi **ít nhất một trong hai thuộc về crate của bạn**. Quy tắc này (*orphan rule*) ngăn hai thư viện khác nhau cùng triển khai một trait cho cùng một kiểu rồi xung đột.
 
-| Trait | Kiểu | Được không |
-|---|---|---|
-| Của bạn | Của bạn | Được |
-| Của bạn | Của thư viện chuẩn (vd `Vec<i32>`) | Được |
-| Của thư viện chuẩn (vd `Display`) | Của bạn | Được |
-| Của thư viện chuẩn | Của thư viện chuẩn | **Không** |
+
+| Trait                             | Kiểu                               | Được không |
+| --------------------------------- | ---------------------------------- | ---------- |
+| Của bạn                           | Của bạn                            | Được       |
+| Của bạn                           | Của thư viện chuẩn (vd `Vec<i32>`) | Được       |
+| Của thư viện chuẩn (vd `Display`) | Của bạn                            | Được       |
+| Của thư viện chuẩn                | Của thư viện chuẩn                 | **Không**  |
+
 
 ```rust
 use std::fmt;
@@ -807,6 +847,8 @@ fn main() {
 [một, hai]
 ```
 
+
+
 ### 4.8 Tự động triển khai với derive
 
 Một số trait rất thường gặp có cách cài đặt "chuẩn". Thay vì viết tay, thêm `#[derive(...)]` trước định nghĩa và compiler tự sinh code:
@@ -840,16 +882,18 @@ Point {
 }
 ```
 
-| Trait | Cho phép | Điều kiện để `derive` |
-|---|---|---|
-| `Debug` | In bằng `{:?}` và `{:#?}` | Mọi trường đều `Debug` |
-| `Clone` | Gọi `.clone()` để tạo bản sao | Mọi trường đều `Clone` |
-| `Copy` | Gán và truyền tham số bằng cách **sao chép** thay vì chuyển quyền sở hữu | Có `Clone`, mọi trường đều `Copy` |
-| `PartialEq` | So sánh `==`, `!=` | Mọi trường đều `PartialEq` |
-| `Eq` | Đánh dấu "so sánh bằng hoàn chỉnh" (`f64` chỉ có `PartialEq`, vì `NaN != NaN`) | Có `PartialEq`, mọi trường đều `Eq` |
-| `PartialOrd` | So sánh `<`, `>`; với `derive`, so từng trường theo thứ tự khai báo | Có `PartialEq`, mọi trường đều `PartialOrd` |
-| `Default` | `Kiểu::default()` cho giá trị mặc định (số là 0, chuỗi rỗng...) | Mọi trường đều `Default` |
-| `Hash` | Dùng làm khoá của `HashMap`, `HashSet` (bài [collections](../learn_08_collections/README.md)) | Mọi trường đều `Hash` |
+
+| Trait        | Cho phép                                                                                      | Điều kiện để `derive`                       |
+| ------------ | --------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| `Debug`      | In bằng `{:?}` và `{:#?}`                                                                     | Mọi trường đều `Debug`                      |
+| `Clone`      | Gọi `.clone()` để tạo bản sao                                                                 | Mọi trường đều `Clone`                      |
+| `Copy`       | Gán và truyền tham số bằng cách **sao chép** thay vì chuyển quyền sở hữu                      | Có `Clone`, mọi trường đều `Copy`           |
+| `PartialEq`  | So sánh `==`, `!=`                                                                            | Mọi trường đều `PartialEq`                  |
+| `Eq`         | Đánh dấu "so sánh bằng hoàn chỉnh" (`f64` chỉ có `PartialEq`, vì `NaN != NaN`)                | Có `PartialEq`, mọi trường đều `Eq`         |
+| `PartialOrd` | So sánh `<`, `>`; với `derive`, so từng trường theo thứ tự khai báo                           | Có `PartialEq`, mọi trường đều `PartialOrd` |
+| `Default`    | `Kiểu::default()` cho giá trị mặc định (số là 0, chuỗi rỗng...)                               | Mọi trường đều `Default`                    |
+| `Hash`       | Dùng làm khoá của `HashMap`, `HashSet` (bài [collections](../learn_08_collections/README.md)) | Mọi trường đều `Hash`                       |
+
 
 Thiếu `derive` thì dùng tính năng tương ứng sẽ lỗi. Dùng `{:?}` với kiểu chưa có `Debug`:
 
@@ -890,16 +934,18 @@ Tương tự, `==` trên kiểu chưa có `PartialEq` báo `E0369` (mục [8.2](
 
 ### 4.9 Trait thường gặp và Display
 
-| Trait | Dùng để |
-|---|---|
-| `Display` | In ra cho người dùng bằng `{}` (phải tự viết, không `derive` được) |
-| `Debug` | In ra cho lập trình viên bằng `{:?}` |
-| `Clone`, `Copy` | Sao chép giá trị |
-| `PartialEq`, `PartialOrd` | So sánh bằng và so sánh thứ tự |
-| `Default` | Giá trị mặc định |
-| `Iterator` | Duyệt qua một chuỗi giá trị (`for`) |
-| `From`, `Into` | Chuyển đổi giữa các kiểu |
-| `Drop` | Chạy code khi giá trị bị huỷ |
+
+| Trait                     | Dùng để                                                            |
+| ------------------------- | ------------------------------------------------------------------ |
+| `Display`                 | In ra cho người dùng bằng `{}` (phải tự viết, không `derive` được) |
+| `Debug`                   | In ra cho lập trình viên bằng `{:?}`                               |
+| `Clone`, `Copy`           | Sao chép giá trị                                                   |
+| `PartialEq`, `PartialOrd` | So sánh bằng và so sánh thứ tự                                     |
+| `Default`                 | Giá trị mặc định                                                   |
+| `Iterator`                | Duyệt qua một chuỗi giá trị (`for`)                                |
+| `From`, `Into`            | Chuyển đổi giữa các kiểu                                           |
+| `Drop`                    | Chạy code khi giá trị bị huỷ                                       |
+
 
 Tự cài đặt `Display` cho kiểu của mình:
 
@@ -984,19 +1030,25 @@ Mèo kêu: Meo meo
 
 So sánh hai cách dùng trait:
 
-| | Generics / `impl Trait` | `dyn Trait` |
-|---|---|---|
-| Tên gọi | Static dispatch (gọi tĩnh) | Dynamic dispatch (gọi động) |
-| Chọn hàm cần gọi | Lúc biên dịch | Lúc chạy, qua vtable |
-| Tốc độ | Nhanh nhất, có thể inline | Chậm hơn một chút (gọi gián tiếp) |
-| Một danh sách nhiều kiểu | Không | **Có** |
-| Kích thước file chạy | Có thể tăng (monomorphization) | Nhỏ hơn |
+
+|                          | Generics / `impl Trait`        | `dyn Trait`                       |
+| ------------------------ | ------------------------------ | --------------------------------- |
+| Tên gọi                  | Static dispatch (gọi tĩnh)     | Dynamic dispatch (gọi động)       |
+| Chọn hàm cần gọi         | Lúc biên dịch                  | Lúc chạy, qua vtable              |
+| Tốc độ                   | Nhanh nhất, có thể inline      | Chậm hơn một chút (gọi gián tiếp) |
+| Một danh sách nhiều kiểu | Không                          | **Có**                            |
+| Kích thước file chạy     | Có thể tăng (monomorphization) | Nhỏ hơn                           |
+
 
 Quy tắc chọn: mặc định dùng generics. Chỉ dùng `dyn` khi thật sự cần trộn nhiều kiểu trong cùng một tập hợp hoặc cần quyết định kiểu lúc chạy.
 
 ---
 
+
+
 ## 5. Lifetime
+
+
 
 ### 5.1 Vấn đề: tham chiếu treo
 
@@ -1094,7 +1146,7 @@ help: consider introducing a named lifetime parameter
   |           ++++     ++          ++          ++
 ```
 
-Thông báo nói rõ: kiểu trả về là tham chiếu, nhưng chữ ký **không cho biết nó mượn từ `x` hay từ `y`**. Compiler không thể kiểm tra thời gian sống nếu không biết điều đó. Ta nói cho nó biết bằng **chú thích lifetime**:
+Thông báo nói rõ: kiểu trả về là tham chiếu, nhưng chữ ký **không cho biết nó mượn từ** `x` **hay từ** `y`. Compiler không thể kiểm tra thời gian sống nếu không biết điều đó. Ta nói cho nó biết bằng **chú thích lifetime**:
 
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -1116,18 +1168,22 @@ Dài nhất: abcd
 
 Cú pháp:
 
-| Cú pháp | Ý nghĩa |
-|---|---|
-| `&i32` | Tham chiếu, lifetime do compiler tự suy ra |
-| `&'a i32` | Tham chiếu có lifetime tên `'a` |
-| `&'a mut i32` | Tham chiếu khả biến có lifetime tên `'a` |
+
+| Cú pháp               | Ý nghĩa                                              |
+| --------------------- | ---------------------------------------------------- |
+| `&i32`                | Tham chiếu, lifetime do compiler tự suy ra           |
+| `&'a i32`             | Tham chiếu có lifetime tên `'a`                      |
+| `&'a mut i32`         | Tham chiếu khả biến có lifetime tên `'a`             |
 | `fn longest<'a>(...)` | Khai báo tham số lifetime `'a`, giống khai báo `<T>` |
+
 
 Điều quan trọng cần nhớ:
 
 - **Chú thích lifetime không làm giá trị sống lâu hơn.** Nó chỉ *mô tả* quan hệ giữa các tham chiếu để compiler kiểm tra.
 - Chữ ký `longest<'a>(x: &'a str, y: &'a str) -> &'a str` có nghĩa: "kết quả không được sống lâu hơn **tham số có thời gian sống ngắn hơn** trong `x` và `y`".
 - Ta viết lifetime ở **chữ ký hàm**. Compiler chỉ cần chữ ký (không cần đọc thân hàm) để kiểm tra các nơi gọi hàm.
+
+
 
 ### 5.3 Lifetime và phạm vi sử dụng
 
@@ -1213,6 +1269,8 @@ fn main() {
 một
 ```
 
+
+
 ### 5.4 Không trả về tham chiếu tới biến cục bộ
 
 Một lỗi lifetime kinh điển: trả về tham chiếu tới thứ được tạo ra ngay trong hàm.
@@ -1259,15 +1317,19 @@ fn main() {
 xin chào
 ```
 
+
+
 ### 5.5 Quy tắc lược bỏ lifetime
 
 Bạn đã viết rất nhiều hàm nhận tham chiếu mà không cần `'a`. Đó là nhờ ba **quy tắc lược bỏ lifetime** (*lifetime elision*): compiler tự điền theo đúng quy tắc, và chỉ báo lỗi khi các quy tắc không đủ.
 
-| Quy tắc | Nội dung |
-|---|---|
-| 1 | Mỗi tham số là tham chiếu nhận **một lifetime riêng** |
-| 2 | Nếu có **đúng một** lifetime đầu vào, nó được gán cho **mọi** lifetime đầu ra |
-| 3 | Nếu có `&self` hoặc `&mut self`, lifetime của `self` được gán cho mọi lifetime đầu ra |
+
+| Quy tắc | Nội dung                                                                              |
+| ------- | ------------------------------------------------------------------------------------- |
+| 1       | Mỗi tham số là tham chiếu nhận **một lifetime riêng**                                 |
+| 2       | Nếu có **đúng một** lifetime đầu vào, nó được gán cho **mọi** lifetime đầu ra         |
+| 3       | Nếu có `&self` hoặc `&mut self`, lifetime của `self` được gán cho mọi lifetime đầu ra |
+
 
 ```rust
 fn first_word(s: &str) -> &str {
@@ -1433,9 +1495,11 @@ Rust
 Lưu ý:
 
 - `'static` nghĩa là *có thể* sống đến hết chương trình, không có nghĩa dữ liệu bị giữ lại mãi mãi.
-- Khi compiler báo lỗi lifetime, **đừng vội thêm `'static` cho hết lỗi**. Thường vấn đề thật là tham chiếu trỏ vào dữ liệu sống quá ngắn. Cách sửa đúng là đổi phạm vi, trả về giá trị sở hữu (`String`) hoặc xem lại thiết kế.
+- Khi compiler báo lỗi lifetime, **đừng vội thêm** `'static` **cho hết lỗi**. Thường vấn đề thật là tham chiếu trỏ vào dữ liệu sống quá ngắn. Cách sửa đúng là đổi phạm vi, trả về giá trị sở hữu (`String`) hoặc xem lại thiết kế.
 
 ---
+
+
 
 ## 6. Thực hành
 
@@ -1550,6 +1614,8 @@ Phiên bản mới nhất: 2.0
 
 1. Đổi chỗ hai trường trong `struct Version` (đặt `minor` lên trước `major`) và dự đoán phiên bản mới nhất (đáp án: `1.12`, vì lúc này `minor` được so trước).
 2. Gọi `largest` với một mảng rỗng, ví dụ `let empty: [i32; 0] = [];`. Chương trình panic với `index out of bounds: the len is 0 but the index is 0`. Hãy sửa `largest` để trả về `Option<&T>`.
+
+
 
 ### Lab 2. Trait Shape và các hình
 
@@ -1730,7 +1796,11 @@ help: consider cloning the value if the performance cost is acceptable
 
 ---
 
+
+
 ## 7. Tìm hiểu chi tiết
+
+
 
 ### 7.1 Generic, impl Trait hay dyn Trait
 
@@ -1790,13 +1860,17 @@ fn compare(a: &impl Summary, b: &impl Summary)
 
 Với chữ ký này, lời gọi `compare(&Article, &Tweet)` biên dịch và in `bài báo và tweet`.
 
-| Tình huống | Chọn |
-|---|---|
-| Nhiều tham số **phải cùng kiểu** | `<T: Trait>(a: &T, b: &T)` |
-| Nhiều tham số **được phép khác kiểu** | `&impl Trait` cho từng tham số |
-| Cần nhắc tên kiểu ở nhiều chỗ (bound `where`, kiểu trả về...) | `<T: Trait>` |
-| Chỉ cần ngắn gọn cho một tham số hoặc kiểu trả về | `impl Trait` |
+
+| Tình huống                                                         | Chọn                               |
+| ------------------------------------------------------------------ | ---------------------------------- |
+| Nhiều tham số **phải cùng kiểu**                                   | `<T: Trait>(a: &T, b: &T)`         |
+| Nhiều tham số **được phép khác kiểu**                              | `&impl Trait` cho từng tham số     |
+| Cần nhắc tên kiểu ở nhiều chỗ (bound `where`, kiểu trả về...)      | `<T: Trait>`                       |
+| Chỉ cần ngắn gọn cho một tham số hoặc kiểu trả về                  | `impl Trait`                       |
 | Trộn nhiều kiểu trong cùng một `Vec` hoặc quyết định kiểu lúc chạy | `Box<dyn Trait>` hoặc `&dyn Trait` |
+
+
+
 
 ### 7.2 Trait dyn compatible
 
@@ -1851,10 +1925,12 @@ Trait không dyn compatible vẫn dùng bình thường với generics và `impl
 
 Trong khối `impl<'a>`, kết quả của phương thức có thể gắn với **hai** thứ khác nhau:
 
-| Kiểu trả về | Gắn với | Ý nghĩa |
-|---|---|---|
-| `&'a str` | Dữ liệu gốc mà struct đang mượn | Kết quả có thể sống lâu hơn struct |
-| `&str` (theo quy tắc 3) | `&self` | Kết quả chỉ sống bằng struct |
+
+| Kiểu trả về             | Gắn với                         | Ý nghĩa                            |
+| ----------------------- | ------------------------------- | ---------------------------------- |
+| `&'a str`               | Dữ liệu gốc mà struct đang mượn | Kết quả có thể sống lâu hơn struct |
+| `&str` (theo quy tắc 3) | `&self`                         | Kết quả chỉ sống bằng struct       |
+
 
 Ví dụ dưới đây dùng phương thức `first_word`. Với `&'a str`, kết quả vẫn dùng được sau khi `stats` đã bị huỷ, miễn là `text` còn sống:
 
@@ -1876,7 +1952,7 @@ fn main() {
         word = stats.first_word();
     }
     println!("{word}");
-}
+}vscode-terminal:/Users-vincent-Desktop-Development-Caramen/3
 ```
 
 **Kết quả:**
@@ -1928,57 +2004,69 @@ Hãy dùng `&'a str` khi kết quả thật sự trỏ vào dữ liệu gốc v�
 
 ### 7.4 Chọn công cụ nào
 
-| Tình huống | Chọn |
-|---|---|
-| Cùng một thuật toán cho nhiều kiểu | Hàm hoặc `struct` generic `<T>` |
-| Nói rõ kiểu cần làm được việc gì | Trait bound `T: Trait` hoặc `impl Trait` |
-| Gom nhiều kiểu khác nhau vào một tập hợp | `Box<dyn Trait>` |
-| In, so sánh, sao chép... theo cách chuẩn | `#[derive(...)]` |
-| In theo định dạng riêng cho người dùng | Tự `impl Display` |
-| Hàm nhận nhiều tham chiếu và trả về một tham chiếu | Chú thích `'a` (khi quy tắc lược bỏ không đủ) |
-| `struct` giữ tham chiếu | `struct S<'a>` và `impl<'a> S<'a>` |
-| Không muốn dính lifetime | Dùng kiểu sở hữu (`String`, `Vec<T>`) thay cho tham chiếu |
+
+| Tình huống                                         | Chọn                                                      |
+| -------------------------------------------------- | --------------------------------------------------------- |
+| Cùng một thuật toán cho nhiều kiểu                 | Hàm hoặc `struct` generic `<T>`                           |
+| Nói rõ kiểu cần làm được việc gì                   | Trait bound `T: Trait` hoặc `impl Trait`                  |
+| Gom nhiều kiểu khác nhau vào một tập hợp           | `Box<dyn Trait>`                                          |
+| In, so sánh, sao chép... theo cách chuẩn           | `#[derive(...)]`                                          |
+| In theo định dạng riêng cho người dùng             | Tự `impl Display`                                         |
+| Hàm nhận nhiều tham chiếu và trả về một tham chiếu | Chú thích `'a` (khi quy tắc lược bỏ không đủ)             |
+| `struct` giữ tham chiếu                            | `struct S<'a>` và `impl<'a> S<'a>`                        |
+| Không muốn dính lifetime                           | Dùng kiểu sở hữu (`String`, `Vec<T>`) thay cho tham chiếu |
+
 
 ---
 
+
+
 ## 8. Lỗi thường gặp
+
+
 
 ### 8.1 Cách đọc lỗi liên quan đến trait và lifetime
 
 Cách đọc một thông báo lỗi (mã lỗi, vị trí, `^^^^`, `help:`) giống ở bài [variables](../learn_03_variables/README.md). Với generics, trait và lifetime, có thêm vài cụm từ hay gặp:
 
-| Cụm từ trong thông báo | Ý nghĩa | Việc nên làm |
-|---|---|---|
-| `consider restricting type parameter` | `T` thiếu một trait bound | Thêm bound vào `<T: ...>` theo gợi ý |
-| `required by a bound in ...` | Hàm bạn gọi đòi một trait mà kiểu của bạn chưa có | Thêm `derive` hoặc `impl` cho kiểu đó |
-| `consider annotating ... with #[derive(...)]` | Chỉ cần `derive` là đủ | Thêm dòng `derive` được gợi ý |
-| `missing lifetime specifier` | Compiler không suy ra được lifetime | Thêm chú thích `'a` |
-| `does not live long enough` | Dữ liệu bị huỷ trước khi tham chiếu dùng xong | Kéo dài phạm vi của dữ liệu, hoặc dùng xong tham chiếu sớm hơn |
+
+| Cụm từ trong thông báo                        | Ý nghĩa                                           | Việc nên làm                                                   |
+| --------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
+| `consider restricting type parameter`         | `T` thiếu một trait bound                         | Thêm bound vào `<T: ...>` theo gợi ý                           |
+| `required by a bound in ...`                  | Hàm bạn gọi đòi một trait mà kiểu của bạn chưa có | Thêm `derive` hoặc `impl` cho kiểu đó                          |
+| `consider annotating ... with #[derive(...)]` | Chỉ cần `derive` là đủ                            | Thêm dòng `derive` được gợi ý                                  |
+| `missing lifetime specifier`                  | Compiler không suy ra được lifetime               | Thêm chú thích `'a`                                            |
+| `does not live long enough`                   | Dữ liệu bị huỷ trước khi tham chiếu dùng xong     | Kéo dài phạm vi của dữ liệu, hoặc dùng xong tham chiếu sớm hơn |
+
+
+
 
 ### 8.2 Lỗi biên dịch
 
-| Mã lỗi | Thông báo | Nguyên nhân | Cách sửa |
-|---|---|---|---|
-| `E0369` | `binary operation '>' cannot be applied to type '&T'` | Dùng toán tử trên `T` khi chưa có bound | Thêm `T: PartialOrd` |
-| `E0277` | `'T' doesn't implement 'std::fmt::Display'` | Dùng `{}` với `T` chưa có `Display` | Thêm `T: Display` |
-| `E0277` | `can't compare 'Version' with 'Version'` | Gọi hàm đòi `PartialOrd` với kiểu chưa có | `#[derive(PartialOrd)]` hoặc tự `impl` |
-| `E0277` | `the trait bound '{integer}: Summary' is not satisfied` | Truyền giá trị của kiểu chưa `impl` trait vào hàm đòi trait đó | `impl Summary for ...` cho kiểu đó, hoặc đổi đối số |
-| `E0277` | `'Point' doesn't implement 'Debug'` | In `{:?}` kiểu chưa có `Debug` | `#[derive(Debug)]` |
-| `E0369` | `binary operation '==' cannot be applied to type 'Point'` | So sánh `==` kiểu chưa có `PartialEq` | `#[derive(PartialEq)]` |
-| `E0599` | `no method named 'distance_from_origin' found for struct 'Point<{integer}>'` | Phương thức chỉ có cho kiểu cụ thể khác (hoặc chưa thoả bound) | Dùng đúng kiểu, hoặc bổ sung bound |
-| `E0308` | `mismatched types` | Một tham số kiểu `T` bị gán hai kiểu khác nhau | Dùng hai tham số `<T, U>`, hoặc `impl Trait` cho từng tham số |
-| `E0308` | `'if' and 'else' have incompatible types` | Hàm `-> impl Trait` trả về hai kiểu khác nhau | Dùng `Box<dyn Trait>` |
-| `E0046` | `not all trait items implemented, missing: 'summarize'` | `impl Trait` thiếu phương thức bắt buộc | Viết đủ các phương thức |
-| `E0117` | `only traits defined in the current crate can be implemented for types defined outside of the crate` | Vi phạm quy tắc orphan | Bọc kiểu trong newtype |
-| `E0204` | `the trait 'Copy' cannot be implemented for this type` | `derive(Copy)` khi có trường không `Copy` (như `String`) | Bỏ `Copy`, dùng `Clone` |
-| `E0382` | `borrow of moved value: 'a'` | Kiểu không `Copy` bị chuyển đi rồi vẫn dùng | `.clone()`, mượn bằng `&`, hoặc `derive(Copy)` nếu phù hợp |
-| `E0508` | `cannot move out of type '[T]', a non-copy slice` | Lấy phần tử `T` ra khỏi slice theo giá trị | Trả về `&T`, hoặc thêm bound `Copy` hay `Clone` |
-| `E0782` | `expected a type, found a trait` | Thiếu từ khoá `dyn` | Viết `dyn Trait` |
-| `E0038` | `the trait 'Duplicate' is not dyn compatible` | Dùng `dyn` với trait không dyn compatible | Bỏ phương thức trả về `Self`, hoặc dùng generics |
-| `E0106` | `missing lifetime specifier` | Hàm trả về tham chiếu mà không rõ mượn từ đâu, hoặc `struct` chứa tham chiếu | Thêm chú thích `'a` |
-| `E0597` | `'x' does not live long enough` | Tham chiếu được dùng sau khi dữ liệu đã bị huỷ | Kéo dài phạm vi dữ liệu, hoặc dùng tham chiếu trong phạm vi hợp lệ |
-| `E0505` | `cannot move out of 'text' because it is borrowed` | Chuyển hoặc huỷ giá trị khi còn tham chiếu đang dùng | Dùng xong tham chiếu trước, hoặc sao chép |
-| `E0515` | `cannot return value referencing local variable 'text'` | Trả về tham chiếu tới biến cục bộ | Trả về giá trị sở hữu (`String`...) |
+
+| Mã lỗi  | Thông báo                                                                                            | Nguyên nhân                                                                  | Cách sửa                                                           |
+| ------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `E0369` | `binary operation '>' cannot be applied to type '&T'`                                                | Dùng toán tử trên `T` khi chưa có bound                                      | Thêm `T: PartialOrd`                                               |
+| `E0277` | `'T' doesn't implement 'std::fmt::Display'`                                                          | Dùng `{}` với `T` chưa có `Display`                                          | Thêm `T: Display`                                                  |
+| `E0277` | `can't compare 'Version' with 'Version'`                                                             | Gọi hàm đòi `PartialOrd` với kiểu chưa có                                    | `#[derive(PartialOrd)]` hoặc tự `impl`                             |
+| `E0277` | `the trait bound '{integer}: Summary' is not satisfied`                                              | Truyền giá trị của kiểu chưa `impl` trait vào hàm đòi trait đó               | `impl Summary for ...` cho kiểu đó, hoặc đổi đối số                |
+| `E0277` | `'Point' doesn't implement 'Debug'`                                                                  | In `{:?}` kiểu chưa có `Debug`                                               | `#[derive(Debug)]`                                                 |
+| `E0369` | `binary operation '==' cannot be applied to type 'Point'`                                            | So sánh `==` kiểu chưa có `PartialEq`                                        | `#[derive(PartialEq)]`                                             |
+| `E0599` | `no method named 'distance_from_origin' found for struct 'Point<{integer}>'`                         | Phương thức chỉ có cho kiểu cụ thể khác (hoặc chưa thoả bound)               | Dùng đúng kiểu, hoặc bổ sung bound                                 |
+| `E0308` | `mismatched types`                                                                                   | Một tham số kiểu `T` bị gán hai kiểu khác nhau                               | Dùng hai tham số `<T, U>`, hoặc `impl Trait` cho từng tham số      |
+| `E0308` | `'if' and 'else' have incompatible types`                                                            | Hàm `-> impl Trait` trả về hai kiểu khác nhau                                | Dùng `Box<dyn Trait>`                                              |
+| `E0046` | `not all trait items implemented, missing: 'summarize'`                                              | `impl Trait` thiếu phương thức bắt buộc                                      | Viết đủ các phương thức                                            |
+| `E0117` | `only traits defined in the current crate can be implemented for types defined outside of the crate` | Vi phạm quy tắc orphan                                                       | Bọc kiểu trong newtype                                             |
+| `E0204` | `the trait 'Copy' cannot be implemented for this type`                                               | `derive(Copy)` khi có trường không `Copy` (như `String`)                     | Bỏ `Copy`, dùng `Clone`                                            |
+| `E0382` | `borrow of moved value: 'a'`                                                                         | Kiểu không `Copy` bị chuyển đi rồi vẫn dùng                                  | `.clone()`, mượn bằng `&`, hoặc `derive(Copy)` nếu phù hợp         |
+| `E0508` | `cannot move out of type '[T]', a non-copy slice`                                                    | Lấy phần tử `T` ra khỏi slice theo giá trị                                   | Trả về `&T`, hoặc thêm bound `Copy` hay `Clone`                    |
+| `E0782` | `expected a type, found a trait`                                                                     | Thiếu từ khoá `dyn`                                                          | Viết `dyn Trait`                                                   |
+| `E0038` | `the trait 'Duplicate' is not dyn compatible`                                                        | Dùng `dyn` với trait không dyn compatible                                    | Bỏ phương thức trả về `Self`, hoặc dùng generics                   |
+| `E0106` | `missing lifetime specifier`                                                                         | Hàm trả về tham chiếu mà không rõ mượn từ đâu, hoặc `struct` chứa tham chiếu | Thêm chú thích `'a`                                                |
+| `E0597` | `'x' does not live long enough`                                                                      | Tham chiếu được dùng sau khi dữ liệu đã bị huỷ                               | Kéo dài phạm vi dữ liệu, hoặc dùng tham chiếu trong phạm vi hợp lệ |
+| `E0505` | `cannot move out of 'text' because it is borrowed`                                                   | Chuyển hoặc huỷ giá trị khi còn tham chiếu đang dùng                         | Dùng xong tham chiếu trước, hoặc sao chép                          |
+| `E0515` | `cannot return value referencing local variable 'text'`                                              | Trả về tham chiếu tới biến cục bộ                                            | Trả về giá trị sở hữu (`String`...)                                |
+
 
 Hai lỗi dưới đây hay làm người mới bối rối nên xem kỹ. Lỗi thứ nhất: quên bound khi dùng `{}`.
 
@@ -2045,11 +2133,13 @@ help: if `T` implemented `Clone`, you could clone the value
 
 > Mã lỗi và câu chữ có thể khác nhau giữa các phiên bản compiler. Bảng trên là kết quả với Rust 1.99.1. Cụm "dyn compatible" trước đây được gọi là "object safe".
 
+
+
 ### 8.3 Cảnh báo thường gặp
 
 Cảnh báo (warning) không chặn việc biên dịch nhưng nên được sửa hết. Hai cảnh báo sau hay xuất hiện khi học trait và lifetime.
 
-**Trường chỉ được dùng qua `derive(Debug)`:**
+**Trường chỉ được dùng qua** `derive(Debug)`**:**
 
 ```rust
 // ⚠️ Biên dịch được nhưng có 1 cảnh báo
@@ -2083,18 +2173,24 @@ fn main() {
 }
 ```
 
-| Cảnh báo | Ý nghĩa | Cách xử lý |
-|---|---|---|
-| `fields 'x' and 'y' are never read` | Compiler không tính `derive(Debug)` là "đọc" trường. Nếu không có code nào khác đọc, trường bị coi là thừa | Đọc trường ở đâu đó có ích, hoặc xoá trường đó |
-| `hiding a lifetime that's elided elsewhere is confusing` | Kiểu trả về `Excerpt` giấu lifetime mà tham số `&str` đã lược bỏ, nên khó thấy hai thứ liên quan nhau | Viết `Excerpt<'_>` cho rõ |
+
+| Cảnh báo                                                 | Ý nghĩa                                                                                                    | Cách xử lý                                     |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `fields 'x' and 'y' are never read`                      | Compiler không tính `derive(Debug)` là "đọc" trường. Nếu không có code nào khác đọc, trường bị coi là thừa | Đọc trường ở đâu đó có ích, hoặc xoá trường đó |
+| `hiding a lifetime that's elided elsewhere is confusing` | Kiểu trả về `Excerpt` giấu lifetime mà tham số `&str` đã lược bỏ, nên khó thấy hai thứ liên quan nhau      | Viết `Excerpt<'_>` cho rõ                      |
+
 
 ---
+
+
 
 ## 9. Bài tập
 
 Hãy tự làm trước, chạy bằng `cargo run`, rồi mới mở phần đáp án. Mỗi bài có **kết quả mong đợi** để bạn tự kiểm tra.
 
 ### Cấp độ 1. Làm quen
+
+
 
 #### Bài 1.1. Thêm trait bound
 
@@ -2120,8 +2216,7 @@ fn main() {
 
 **Gợi ý:** đọc dòng `help:` trong thông báo lỗi.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::fmt::Display;
@@ -2138,8 +2233,6 @@ fn main() {
 
 Giải thích: `{value}` cần `T` có trait `Display`. Compiler không được phép giả định điều đó cho một `T` bất kỳ, nên ta cam kết bằng bound `T: Display`.
 
-</details>
-
 #### Bài 1.2. Struct generic
 
 **Đề:** định nghĩa `struct Pair<T>` có hai trường `first` và `second` cùng kiểu `T`, và phương thức `swap(self) -> Pair<T>` trả về một `Pair` mới với hai phần tử đổi chỗ. Thử với số nguyên và với chuỗi `&str`.
@@ -2153,8 +2246,7 @@ hai một
 
 **Gợi ý:** khối `impl` bắt đầu bằng `impl<T> Pair<T>`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Pair<T> {
@@ -2187,8 +2279,6 @@ fn main() {
 
 Giải thích: `swap` nhận `self` (lấy quyền sở hữu) nên chỉ cần **di chuyển** hai giá trị sang vị trí mới, không cần so sánh hay sao chép. Vì thế `T` không cần bound nào. Compiler tạo hai bản `Pair<i32>` và `Pair<&str>` riêng.
 
-</details>
-
 #### Bài 1.3. Định nghĩa và triển khai trait
 
 **Đề:** định nghĩa trait `Greet` có phương thức `hello(&self) -> String`. Tạo hai kiểu rỗng `Vietnamese` và `English`, mỗi kiểu triển khai `Greet` để trả về lời chào tương ứng.
@@ -2200,8 +2290,7 @@ Xin chào
 Hello
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 trait Greet {
@@ -2227,9 +2316,9 @@ fn main() {
 
 Giải thích: `struct Vietnamese;` là *unit struct* (không có trường). Gọi `Vietnamese.hello()` tạo giá trị rồi gọi phương thức ngay.
 
-</details>
-
 ### Cấp độ 2. Vận dụng
+
+
 
 #### Bài 2.1. Dự đoán kết quả
 
@@ -2253,8 +2342,7 @@ fn main() {
 }
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 **Kết quả:**
 
@@ -2272,7 +2360,7 @@ Giải thích:
 - `longest("abc", "xyz")`: hai chuỗi **bằng độ dài** nên điều kiện `>=` đúng và hàm trả về `x`, tức `abc`.
 - `longest("hi", "hello")`: `hello` dài hơn.
 
-</details>
+
 
 #### Bài 2.2. Phương thức mặc định
 
@@ -2287,8 +2375,7 @@ Giải thích:
 
 **Gợi ý:** `Student` chỉ cần viết `name`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 trait Describe {
@@ -2325,8 +2412,6 @@ fn main() {
 
 Giải thích: `Student` không viết `describe` nên dùng bản mặc định, bản đó gọi `self.name()`. `Teacher` viết lại `describe` nên bản mặc định bị thay thế.
 
-</details>
-
 #### Bài 2.3. impl Trait ở tham số và kiểu trả về
 
 **Đề:** cho trait `Shape` có `area(&self) -> f64`, các kiểu `Rectangle { width, height }` và `Square(f64)`. Viết hàm `total_area` nhận **hai hình có thể thuộc hai kiểu khác nhau** và trả về tổng diện tích, cùng hàm `unit_square()` trả về `impl Shape` là hình vuông cạnh 1.
@@ -2340,8 +2425,7 @@ Hình vuông đơn vị: 1.0
 
 **Gợi ý:** dùng `&impl Shape` cho từng tham số.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 trait Shape {
@@ -2380,8 +2464,6 @@ fn main() {
 
 Giải thích: mỗi `impl Shape` ở tham số là một kiểu riêng nên `Rectangle` và `Square` truyền chung được (mục [7.1](#71-generic-impl-trait-hay-dyn-trait)). `unit_square` trả về đúng một kiểu cụ thể (`Square`), nhưng người gọi chỉ biết nó là một `Shape`.
 
-</details>
-
 #### Bài 2.4. Sửa lỗi lifetime
 
 **Đề:** hàm `shorter` trả về chuỗi ngắn hơn trong hai chuỗi, nhưng không biên dịch được. Sửa lỗi.
@@ -2406,8 +2488,7 @@ cargo
 
 **Gợi ý:** hàm có hai tham chiếu đầu vào và trả về một tham chiếu, đúng tình huống của `longest` ở mục [5.2](#52-chú-thích-lifetime).
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 fn shorter<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -2422,9 +2503,9 @@ fn main() {
 
 Giải thích: thêm tham số lifetime `'a` và gắn vào cả hai tham số lẫn kiểu trả về. Với hai chuỗi bằng độ dài (`cargo` và `rustc`), điều kiện `<=` trả về `x`, tức `cargo`.
 
-</details>
-
 ### Cấp độ 3. Thử thách
+
+
 
 #### Bài 3.1. Ngăn xếp generic
 
@@ -2442,8 +2523,7 @@ None
 
 **Gợi ý:** `Vec` đã có sẵn `push`, `pop`, `last`, `len`, `is_empty` (bài [collections](../learn_08_collections/README.md)). `peek` chỉ mượn nên trả về `Option<&T>`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 struct Stack<T> {
@@ -2476,8 +2556,6 @@ fn main() {
 ```
 
 Giải thích: `Stack<T>` không đòi bound nào vì chỉ cất và lấy giá trị, không so sánh hay in. `pop` trả về `Option<T>` (chuyển quyền sở hữu phần tử ra), còn `peek` trả về `Option<&T>` (chỉ mượn). `Stack::new()` tự suy ra kiểu `T` từ lần `push` đầu tiên.
-
-</details>
 
 #### Bài 3.2. Bốn đoạn mã, bốn lỗi
 
@@ -2536,17 +2614,18 @@ fn main() {
 }
 ```
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
-| Đoạn | Lỗi | Nguyên nhân | Cách sửa |
-|---|---|---|---|
-| (a) | `E0369` binary operation `>` cannot be applied to type `T` | `T` chưa có bound để so sánh | `fn bigger<T: PartialOrd>(a: T, b: T) -> T` |
-| (b) | `E0106` missing lifetime specifier | Hai tham chiếu đầu vào, một tham chiếu đầu ra, quy tắc lược bỏ không đủ | `fn pick<'a>(x: &'a str, y: &'a str) -> &'a str` |
-| (c) | `E0597` `word` does not live long enough | `r` được dùng sau khi `word` bị huỷ ở cuối khối | Khai báo `word` ngoài khối, hoặc `println!` trong khối |
-| (d) | `E0277` the trait bound `&str: Greet` is not satisfied | `welcome` đòi kiểu có `Greet`, mà `&str` chưa `impl Greet` | Tạo kiểu của bạn (như `struct Person`), `impl Greet for Person` rồi truyền nó vào |
 
-</details>
+| Đoạn | Lỗi                                                        | Nguyên nhân                                                             | Cách sửa                                                                          |
+| ---- | ---------------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| (a)  | `E0369` binary operation `>` cannot be applied to type `T` | `T` chưa có bound để so sánh                                            | `fn bigger<T: PartialOrd>(a: T, b: T) -> T`                                       |
+| (b)  | `E0106` missing lifetime specifier                         | Hai tham chiếu đầu vào, một tham chiếu đầu ra, quy tắc lược bỏ không đủ | `fn pick<'a>(x: &'a str, y: &'a str) -> &'a str`                                  |
+| (c)  | `E0597` `word` does not live long enough                   | `r` được dùng sau khi `word` bị huỷ ở cuối khối                         | Khai báo `word` ngoài khối, hoặc `println!` trong khối                            |
+| (d)  | `E0277` the trait bound `&str: Greet` is not satisfied     | `welcome` đòi kiểu có `Greet`, mà `&str` chưa `impl Greet`              | Tạo kiểu của bạn (như `struct Person`), `impl Greet for Person` rồi truyền nó vào |
+
+
+
 
 #### Bài 3.3. Tìm hình lớn nhất
 
@@ -2560,8 +2639,7 @@ Lớn nhất: Hình tròn (12.57)
 
 **Gợi ý:** hàm chỉ có một tham số tham chiếu nên không cần chú thích lifetime. Dùng `as_ref()` để lấy `&dyn Shape` từ `Box<dyn Shape>`.
 
-<details>
-<summary>Xem đáp án</summary>
+Xem đáp án
 
 ```rust
 use std::f64::consts::PI;
@@ -2608,30 +2686,34 @@ fn main() {
 
 Giải thích: danh sách chứa nhiều kiểu khác nhau nên phải dùng `Box<dyn Shape>`. Kết quả mượn từ `shapes`, và theo quy tắc lược bỏ số 2, lifetime của kết quả chính là lifetime của `shapes`, nên không cần viết `'a`.
 
-</details>
-
 ---
+
+
 
 ## 10. Tóm tắt
 
-| Chủ đề | Ghi nhớ |
-|---|---|
-| Generics | `<T>` cho phép viết một lần dùng cho nhiều kiểu. Compiler tạo bản riêng cho từng kiểu (monomorphization), không tốn chi phí chạy |
-| Trait | "Hợp đồng" hành vi. `trait` khai báo, `impl Trait for Type` triển khai, có thể có phương thức mặc định |
-| Trait bound | `T: Trait`, `T: A + B`, `where`. Không có bound thì không được dùng toán tử hay phương thức của trait trên `T` |
-| `impl Trait` | Cú pháp ngắn ở tham số, và dùng ở kiểu trả về cho **một** kiểu cụ thể |
-| `derive` | Tự sinh `Debug`, `Clone`, `Copy`, `PartialEq`, `PartialOrd`, `Default`, `Hash`. Mọi trường phải hỗ trợ trait đó |
-| Orphan rule | Chỉ `impl` trait cho kiểu khi trait hoặc kiểu thuộc crate của bạn. Dùng newtype để vòng |
-| `dyn Trait` | Quyết định lúc chạy, cho phép trộn nhiều kiểu (`Vec<Box<dyn Trait>>`). Mặc định ưu tiên generics |
-| Lifetime | Mô tả thời gian sống của tham chiếu. `'a` không kéo dài giá trị, chỉ mô tả quan hệ |
-| Lược bỏ lifetime | Ba quy tắc: mỗi tham chiếu đầu vào một lifetime; một đầu vào thì gán cho đầu ra; `&self` thì gán cho đầu ra |
-| `struct` chứa tham chiếu | `struct S<'a>` và `impl<'a> S<'a>`. Muốn tránh lifetime thì dùng kiểu sở hữu như `String` |
-| `'static` | Tham chiếu có thể sống suốt chương trình (như chuỗi viết trực tiếp). Đừng thêm chỉ để hết lỗi |
-| Không trả về tham chiếu cục bộ | Trả về giá trị sở hữu thay vì tham chiếu tới biến sắp bị huỷ |
+
+| Chủ đề                         | Ghi nhớ                                                                                                                          |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| Generics                       | `<T>` cho phép viết một lần dùng cho nhiều kiểu. Compiler tạo bản riêng cho từng kiểu (monomorphization), không tốn chi phí chạy |
+| Trait                          | "Hợp đồng" hành vi. `trait` khai báo, `impl Trait for Type` triển khai, có thể có phương thức mặc định                           |
+| Trait bound                    | `T: Trait`, `T: A + B`, `where`. Không có bound thì không được dùng toán tử hay phương thức của trait trên `T`                   |
+| `impl Trait`                   | Cú pháp ngắn ở tham số, và dùng ở kiểu trả về cho **một** kiểu cụ thể                                                            |
+| `derive`                       | Tự sinh `Debug`, `Clone`, `Copy`, `PartialEq`, `PartialOrd`, `Default`, `Hash`. Mọi trường phải hỗ trợ trait đó                  |
+| Orphan rule                    | Chỉ `impl` trait cho kiểu khi trait hoặc kiểu thuộc crate của bạn. Dùng newtype để vòng                                          |
+| `dyn Trait`                    | Quyết định lúc chạy, cho phép trộn nhiều kiểu (`Vec<Box<dyn Trait>>`). Mặc định ưu tiên generics                                 |
+| Lifetime                       | Mô tả thời gian sống của tham chiếu. `'a` không kéo dài giá trị, chỉ mô tả quan hệ                                               |
+| Lược bỏ lifetime               | Ba quy tắc: mỗi tham chiếu đầu vào một lifetime; một đầu vào thì gán cho đầu ra; `&self` thì gán cho đầu ra                      |
+| `struct` chứa tham chiếu       | `struct S<'a>` và `impl<'a> S<'a>`. Muốn tránh lifetime thì dùng kiểu sở hữu như `String`                                        |
+| `'static`                      | Tham chiếu có thể sống suốt chương trình (như chuỗi viết trực tiếp). Đừng thêm chỉ để hết lỗi                                    |
+| Không trả về tham chiếu cục bộ | Trả về giá trị sở hữu thay vì tham chiếu tới biến sắp bị huỷ                                                                     |
+
 
 > **Bước tiếp theo gợi ý:** module và crate, closure và iterator, viết test, và smart pointer như `Box`, `Rc`. Tất cả đều dựa trên generics, trait và lifetime mà bạn vừa học.
 
 ---
+
+
 
 ## 11. Tài liệu tham khảo
 
@@ -2649,8 +2731,9 @@ Giải thích: danh sách chứa nhiều kiểu khác nhau nên phải dùng `Bo
 - [The Rust Reference, Traits và dyn compatibility](https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility)
 - [The Rust Reference, Implementations và orphan rules](https://doc.rust-lang.org/reference/items/implementations.html#orphan-rules)
 - [The Rustonomicon, Lifetimes](https://doc.rust-lang.org/nomicon/lifetimes.html)
-- [Tài liệu thư viện chuẩn, trait `Display`](https://doc.rust-lang.org/std/fmt/trait.Display.html)
-- [Tài liệu thư viện chuẩn, trait `Copy`](https://doc.rust-lang.org/std/marker/trait.Copy.html)
+- [Tài liệu thư viện chuẩn, trait](https://doc.rust-lang.org/std/fmt/trait.Display.html) `Display`
+- [Tài liệu thư viện chuẩn, trait](https://doc.rust-lang.org/std/marker/trait.Copy.html) `Copy`
 - [Tra cứu mã lỗi, ví dụ E0277](https://doc.rust-lang.org/error_codes/E0277.html)
 - [Tra cứu mã lỗi, ví dụ E0106](https://doc.rust-lang.org/error_codes/E0106.html)
 - [Tra cứu mã lỗi, ví dụ E0597](https://doc.rust-lang.org/error_codes/E0597.html)
+
