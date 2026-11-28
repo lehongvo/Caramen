@@ -1,0 +1,6 @@
+[package]
+name = "level_09_dp_graphs_concurrency"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]

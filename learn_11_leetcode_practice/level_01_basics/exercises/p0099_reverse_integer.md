@@ -1,0 +1,150 @@
+# Problem 0099: Reverse Integer
+
+- **Difficulty:** Medium
+- **Topics:** `checked_mul` and `checked_add` on `i32`, `%` with negative numbers, `match` on `Option`
+- **Source:** [LeetCode 7. Reverse Integer](https://leetcode.com/problems/reverse-integer/)
+
+## Problem
+
+Given a signed 32-bit integer `x`, return `x` with its decimal digits reversed (the sign stays in
+front). If the reversed value does not fit in an `i32` (outside `-2^31 ..= 2^31 - 1`), return `0`.
+
+Pretend that 64-bit integers do not exist: do all the arithmetic in `i32` and detect overflow
+instead of avoiding it with a wider type.
+
+Implement `Solution::reverse(x: i32) -> i32`.
+
+## Examples
+
+```text
+Input:  x = 123
+Output: 321
+
+Input:  x = -123
+Output: -321
+
+Input:  x = 120
+Output: 21
+
+Input:  x = 1534236469
+Output: 0
+Explanation: 9646324351 is larger than i32::MAX.
+```
+
+## Constraints
+
+- `-2^31 <= x <= 2^31 - 1`
+
+## Hints
+
+1. The digit loop `rev = rev * 10 + x % 10; x /= 10;` works for negative numbers too: in Rust,
+   `-123 % 10 == -3` and `-123 / 10 == -12`.
+2. Either step (`* 10` or `+ digit`) can overflow. Use `checked_mul(10)` and `checked_add(digit)`.
+3. Do not take `x.abs()` first: `i32::MIN.abs()` itself overflows.
+
+## Starter code
+
+Write your code in [`src/practice/p0099_reverse_integer.rs`](../src/practice/p0099_reverse_integer.rs) (replace every `todo!(...)`, keep the tests unchanged), then run:
+
+```bash
+cargo test practice::p0099
+```
+
+```rust
+pub struct Solution;
+
+impl Solution {
+    pub fn reverse(x: i32) -> i32 {
+        todo!("Write your solution here")
+    }
+}
+```
+
+## Tests
+
+<details>
+<summary>Show the tests used to check your solution</summary>
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_positive() {
+        assert_eq!(Solution::reverse(123), 321);
+    }
+
+    #[test]
+    fn example_negative() {
+        assert_eq!(Solution::reverse(-123), -321);
+    }
+
+    #[test]
+    fn example_trailing_zero() {
+        assert_eq!(Solution::reverse(120), 21);
+        assert_eq!(Solution::reverse(0), 0);
+    }
+
+    #[test]
+    fn example_overflow() {
+        assert_eq!(Solution::reverse(1_534_236_469), 0);
+    }
+
+    #[test]
+    fn boundaries() {
+        assert_eq!(Solution::reverse(i32::MAX), 0);
+        assert_eq!(Solution::reverse(i32::MIN), 0);
+        // 1463847412 reversed is 2147483641, which still fits.
+        assert_eq!(Solution::reverse(1_463_847_412), 2_147_483_641);
+        // -1463847412 reversed is -2147483641; -2147483648 itself is not reachable.
+        assert_eq!(Solution::reverse(-1_463_847_412), -2_147_483_641);
+        // 1563847412 reversed would be 2147483651 > i32::MAX.
+        assert_eq!(Solution::reverse(1_563_847_412), 0);
+    }
+}
+```
+
+</details>
+
+## Answer
+
+<details>
+<summary>Show the answer</summary>
+
+**Idea:** run the digit loop on the signed value. Because `%` keeps the sign of the dividend,
+every digit of a negative number is negative and `rev` grows toward negative values, so no
+special handling of the sign is needed. Each step uses checked arithmetic; the first overflow
+means the answer does not fit, so return `0`.
+
+**Complexity:** `O(d)` time (at most 10 digits), `O(1)` space.
+
+**Rust concepts:**
+- `match rev.checked_mul(10).and_then(|r| r.checked_add(digit))` chains two checked operations:
+  `and_then` runs the second only if the first returned `Some`. A nested `match` would work too.
+- Truncating `/` and sign-keeping `%` (problem 0009) are exactly what this algorithm needs.
+- The function is still pasteable into LeetCode as-is; it never uses `i64`.
+
+```rust
+pub struct Solution;
+
+impl Solution {
+    pub fn reverse(x: i32) -> i32 {
+        let mut rest = x;
+        let mut rev: i32 = 0;
+        while rest != 0 {
+            let digit = rest % 10; // negative when x is negative
+            rev = match rev.checked_mul(10).and_then(|r| r.checked_add(digit)) {
+                Some(value) => value,
+                None => return 0,
+            };
+            rest /= 10;
+        }
+        rev
+    }
+}
+```
+
+Full tested solution: [`src/solutions/p0099_reverse_integer.rs`](../src/solutions/p0099_reverse_integer.rs)
+
+</details>

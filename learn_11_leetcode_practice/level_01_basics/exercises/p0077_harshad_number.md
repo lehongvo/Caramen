@@ -1,0 +1,138 @@
+# Problem 0077: Harshad Number
+
+- **Difficulty:** Easy
+- **Topics:** helper functions, digit sums, `if` as the return expression
+- **Source:** [LeetCode 3099. Harshad Number](https://leetcode.com/problems/harshad-number/)
+
+## Problem
+
+A positive integer is a **Harshad number** if it is divisible by the sum of its digits. Given an
+integer `x`, return the sum of its digits if `x` is a Harshad number, and `-1` otherwise.
+
+Implement `Solution::sum_of_the_digits_of_harshad_number(x: i32) -> i32`.
+
+## Examples
+
+```text
+Input:  x = 18
+Output: 9
+Explanation: 1 + 8 = 9 and 18 % 9 == 0.
+
+Input:  x = 23
+Output: -1
+Explanation: 2 + 3 = 5 and 23 is not divisible by 5.
+```
+
+## Constraints
+
+- `1 <= x <= 100`
+
+## Hints
+
+1. Write a small helper `digit_sum(n: i32) -> i32` and call it.
+2. The digit sum of a positive number is at least 1, so `x % sum` is always safe.
+
+## Starter code
+
+Write your code in [`src/practice/p0077_harshad_number.rs`](../src/practice/p0077_harshad_number.rs) (replace every `todo!(...)`, keep the tests unchanged), then run:
+
+```bash
+cargo test practice::p0077
+```
+
+```rust
+pub struct Solution;
+
+impl Solution {
+    pub fn sum_of_the_digits_of_harshad_number(x: i32) -> i32 {
+        todo!("Write your solution here")
+    }
+}
+```
+
+## Tests
+
+<details>
+<summary>Show the tests used to check your solution</summary>
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_harshad() {
+        assert_eq!(Solution::sum_of_the_digits_of_harshad_number(18), 9);
+    }
+
+    #[test]
+    fn example_not_harshad() {
+        assert_eq!(Solution::sum_of_the_digits_of_harshad_number(23), -1);
+    }
+
+    #[test]
+    fn single_digits_are_always_harshad() {
+        for d in 1..=9 {
+            assert_eq!(Solution::sum_of_the_digits_of_harshad_number(d), d);
+        }
+    }
+
+    #[test]
+    fn boundaries() {
+        assert_eq!(Solution::sum_of_the_digits_of_harshad_number(100), 1);
+        assert_eq!(Solution::sum_of_the_digits_of_harshad_number(99), -1);
+        assert_eq!(Solution::sum_of_the_digits_of_harshad_number(10), 1);
+    }
+
+    #[test]
+    fn count_up_to_100() {
+        let count = (1..=100)
+            .filter(|&x| Solution::sum_of_the_digits_of_harshad_number(x) != -1)
+            .count();
+        assert_eq!(count, 33);
+    }
+}
+```
+
+</details>
+
+## Answer
+
+<details>
+<summary>Show the answer</summary>
+
+**Idea:** compute the digit sum with a helper, then return it if `x % sum == 0` and `-1`
+otherwise.
+
+**Complexity:** `O(d)` time, `O(1)` space.
+
+**Rust concepts:**
+- A private associated function `fn digit_sum(n: i32) -> i32` inside `impl Solution` keeps the
+  main function to two lines; call it with `Self::digit_sum(x)`.
+- Splitting a problem into small named functions is the main tool for keeping code readable;
+  see [The Rust Book 3.3](https://doc.rust-lang.org/book/ch03-03-how-functions-work.html).
+
+```rust
+pub struct Solution;
+
+impl Solution {
+    pub fn sum_of_the_digits_of_harshad_number(x: i32) -> i32 {
+        let sum = Self::digit_sum(x);
+        if x % sum == 0 { sum } else { -1 }
+    }
+
+    fn digit_sum(n: i32) -> i32 {
+        let mut rest = n;
+        let mut sum = 0;
+        while rest > 0 {
+            sum += rest % 10;
+            rest /= 10;
+        }
+        sum
+    }
+}
+```
+
+Full tested solution: [`src/solutions/p0077_harshad_number.rs`](../src/solutions/p0077_harshad_number.rs)
+
+</details>

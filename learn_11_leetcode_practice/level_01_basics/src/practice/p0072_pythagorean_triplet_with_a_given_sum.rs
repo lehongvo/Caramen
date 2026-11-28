@@ -1,0 +1,84 @@
+// ==================================================================
+// PRACTICE 0072: replace every `todo!(...)` with your code; keep the tests unchanged.
+// Full problem statement: exercises/p0072_pythagorean_triplet_with_a_given_sum.md
+// Run the tests:          cargo test practice::p0072
+// ==================================================================
+
+//! # Problem 0072: Pythagorean Triplet with a Given Sum
+//!
+//! - **Difficulty:** Easy
+//! - **Topics:** labeled blocks with `break 'label value`, nested `for` loops, choosing loop bounds, tuples
+//! - **Source:** Original · [Rust Reference: labeled block expressions](https://doc.rust-lang.org/reference/expressions/loop-expr.html#labeled-block-expressions)
+//!
+//! ## Problem
+//!
+//! A **Pythagorean triplet** is a set of three positive integers `a < b < c` with
+//! `a^2 + b^2 == c^2`. Write `pythagorean_triplet(sum: u32) -> Option<(u32, u32, u32)>` that finds a
+//! triplet with `a + b + c == sum`. If several exist, return the one with the **smallest** `a`. If
+//! none exists, return `None`.
+//!
+//! ## Examples
+//!
+//! ```text
+//! pythagorean_triplet(12)   -> Some((3, 4, 5))
+//! pythagorean_triplet(30)   -> Some((5, 12, 13))
+//! pythagorean_triplet(120)  -> Some((20, 48, 52))   (24, 45, 51) and (30, 40, 50) also work
+//! pythagorean_triplet(1000) -> Some((200, 375, 425))
+//! pythagorean_triplet(11)   -> None
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `0 <= sum <= 10_000` (so `c^2` fits in a `u32`)
+//!
+//! ## Hints
+//!
+//! 1. Choose `a` and `b`; then `c = sum - a - b` is forced.
+//! 2. Because `a < b < c`, `a` is below `sum / 3`, and `b` is below `(sum - a) / 2`.
+//!    Tight bounds also guarantee that `sum - a - b` never underflows.
+//! 3. To leave two loops **with a value**, wrap them in a labeled block: `'search: { ... }`.
+
+pub fn pythagorean_triplet(sum: u32) -> Option<(u32, u32, u32)> {
+    todo!("Write your solution here")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn small_triplets() {
+        assert_eq!(pythagorean_triplet(12), Some((3, 4, 5)));
+        assert_eq!(pythagorean_triplet(24), Some((6, 8, 10)));
+        assert_eq!(pythagorean_triplet(30), Some((5, 12, 13)));
+    }
+
+    #[test]
+    fn smallest_a_wins() {
+        assert_eq!(pythagorean_triplet(120), Some((20, 48, 52)));
+    }
+
+    #[test]
+    fn project_euler_classic() {
+        assert_eq!(pythagorean_triplet(1000), Some((200, 375, 425)));
+    }
+
+    #[test]
+    fn no_triplet() {
+        for sum in [0, 1, 2, 3, 11, 13, 1001] {
+            assert_eq!(pythagorean_triplet(sum), None, "sum = {sum}");
+        }
+    }
+
+    #[test]
+    fn results_are_valid_up_to_the_limit() {
+        for sum in (9_000..=10_000).step_by(7) {
+            if let Some((a, b, c)) = pythagorean_triplet(sum) {
+                assert!(a < b && b < c);
+                assert_eq!(a + b + c, sum);
+                assert_eq!(a * a + b * b, c * c);
+            }
+        }
+        assert_eq!(pythagorean_triplet(10_000), Some((2000, 3750, 4250)));
+    }
+}

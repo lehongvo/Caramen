@@ -1,0 +1,88 @@
+// ==================================================================
+// PRACTICE 0032: replace every `todo!(...)` with your code; keep the tests unchanged.
+// Full problem statement: exercises/p0032_average_salary_excluding_the_minimum_and_maximum_salary.md
+// Run the tests:          cargo test practice::p0032
+// ==================================================================
+
+//! # Problem 0032: Average Salary Excluding the Minimum and Maximum Salary
+//!
+//! - **Difficulty:** Easy
+//! - **Topics:** `as f64` casts, `min`/`max` tracking, iterating a `Vec` by reference
+//! - **Source:** [LeetCode 1491. Average Salary Excluding the Minimum and Maximum Salary](https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/)
+//!
+//! ## Problem
+//!
+//! You are given a vector `salary` of **distinct** integers, where `salary[i]` is the salary of
+//! employee `i`. Return the average salary of the employees after leaving out the single lowest
+//! and the single highest salary. Answers within `10^-5` of the exact value are accepted.
+//!
+//! Implement `Solution::average(salary: Vec<i32>) -> f64`.
+//!
+//! ## Examples
+//!
+//! ```text
+//! Input:  salary = [4000, 3000, 1000, 2000]
+//! Output: 2500.00000
+//! Explanation: without 1000 (minimum) and 4000 (maximum): (2000 + 3000) / 2 = 2500.
+//!
+//! Input:  salary = [1000, 2000, 3000]
+//! Output: 2000.00000
+//! Explanation: only 2000 remains.
+//! ```
+//!
+//! ## Constraints
+//!
+//! - `3 <= salary.len() <= 100`
+//! - `1000 <= salary[i] <= 10^6`
+//! - All values are distinct.
+//!
+//! ## Hints
+//!
+//! 1. One pass can compute the sum, the minimum and the maximum at the same time.
+//! 2. Integer division would drop the fraction: convert to `f64` **before** dividing.
+
+pub struct Solution;
+
+impl Solution {
+    pub fn average(salary: Vec<i32>) -> f64 {
+        todo!("Write your solution here")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn assert_close(actual: f64, expected: f64) {
+        assert!(
+            (actual - expected).abs() < 1e-5,
+            "got {actual}, expected {expected}"
+        );
+    }
+
+    #[test]
+    fn example_four_salaries() {
+        assert_close(Solution::average(vec![4000, 3000, 1000, 2000]), 2500.0);
+    }
+
+    #[test]
+    fn example_three_salaries() {
+        assert_close(Solution::average(vec![1000, 2000, 3000]), 2000.0);
+    }
+
+    #[test]
+    fn fractional_average() {
+        // Without 1000 and 9000: (2000 + 3000 + 5000) / 3 = 3333.33...
+        assert_close(
+            Solution::average(vec![9000, 2000, 1000, 3000, 5000]),
+            10_000.0 / 3.0,
+        );
+    }
+
+    #[test]
+    fn largest_input() {
+        let salary: Vec<i32> = (0..100).map(|i| 1_000_000 - i * 9_000).collect();
+        // Remove 1_000_000 and 109_000; the 98 middle values average to 554_500.
+        assert_close(Solution::average(salary), 554_500.0);
+    }
+}

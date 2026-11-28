@@ -1,0 +1,3 @@
+# Downloaded data used by tools/check.py
+tools/.cache/
+__pycache__/
